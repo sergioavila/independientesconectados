@@ -1,0 +1,158 @@
+/*
+Theme Name: Independientes Conectados
+Theme URI: http://www.creactivaweb.cl
+Template: Divi
+Author: Sebastián García
+Author URI: http://www.creactivaweb.cl
+Description: Theme hijo para Independientes Conectados
+Tags: Independientes Conectados
+Version: 4.22.1.1694545756
+Updated: 2023-09-12 15:09:16
+
+*/
+/*.inicioBTN:Before{
+	content: url(/wp-content/uploads/2023/09/gome.png);
+	margin-right:15px;
+;
+}
+.BeneficiosBTN:Before{
+	content: url(/wp-content/uploads/2023/09/beneficios.png);
+	margin-right:15px;
+margin-top: -2px;
+}
+.EducacinBTN:Before{
+	content: url(/wp-content/uploads/2023/09/education.png);
+	margin-right:15px;
+
+}
+.ForoBTN:Before{
+	content: url(/wp-content/uploads/2023/09/foro.png);
+	margin-right:15px;
+
+}
+.IngresarBTN{
+	border: 1px solid #00147D;
+    padding: 13px 30px 3px 30px!important;
+    border-radius: 5px;
+    color: #00147D;
+    margin-top: -10px!important;
+	
+}
+	color: #00147D!important;
+    margin-top: 2px;
+}
+.IngresarBTN:Before{
+	content: url(/wp-content/uploads/2023/09/login.png);
+	margin-right:15px;
+
+}
+*/
+
+.ingresar a {
+    border-radius: 5px!important;
+    color: #fff!important;
+    background-color: #0a0e77;
+    border-radius: 5px!important;
+    font-weight: 600!important;
+    padding: 10px 20px!important;
+	margin-top:30px;
+}
+.registroBTN a{
+	color:#0a0e77!important;
+	margin-top:40px;
+}
+
+.et_pb_main_blurb_image {
+    display: inline-block;
+    margin-bottom: 0px!important;
+    line-height: 0;
+    max-width: 100%;
+}
+.logedinuser{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1.2rem;
+}
+.logedinuser p{
+    display: flex;
+    border: 1px solid #0a0e77;
+    border-radius: 15px;
+    color: #0a0e77;
+    overflow: hidden;
+}
+.logedinuser a{
+    color: #0a0e77;
+    margin-left: 20px;
+}
+.logedinuser a img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.logedinuser p span.text{
+    display: block;
+    padding: 10px 20px;
+}
+.logedinuser p span.puntos{
+    display: block;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    background-color: #0a0e77;
+    color: #fff;
+    padding: 10px 20px;
+}
+#wppb-login-wrap{
+    margin: 0 auto;
+    width: 400px;
+    max-width: 90%;
+}
+#wppb-login-wrap .input{
+    border: 2px solid #0A0E77!important;
+    font-size: 16px!important;
+    height: auto!important;
+    margin: 0!important;
+    outline: 0!important;
+    padding: 15px!important;
+    width: 100%!important;
+    background-color: #fff!important;
+    color: #000!important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset!important;
+    margin-bottom: 30px!important;
+    border-radius: 10px!important;
+}
+#wppb-login-wrap .login-remember,
+#wppb-login-wrap  #user_pass,
+#wppb-login-wrap .wppb-toggle-pw{
+    display: none !important;
+}
+
+#wppb-login-wrap #wppb-submit{
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Roboto,sans-serif;
+    font-weight: 0;
+    font-size: 14px;
+    color: #fff;
+    background-color: #0A0E77;
+    padding: 10px 30px;
+    border: none;
+    box-shadow: rgb(0,0,0) 0px 0px 0px 0px;
+    border-radius: 10px;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    text-align: center!important;
+}
+.et_post_meta_wrapper h1,
+.et_post_meta_wrapper .post-meta,
+#comment-wrap{
+    display: none !important;
+}
+#bbpress-forums a, #bbpress-forums a:hover{
+    color: #0a0e77!important;
+}
