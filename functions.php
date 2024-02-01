@@ -240,7 +240,10 @@ function obtener_posts_json() {
             foreach($mayoristas as $mayorista){
                 foreach($mayorista['productos'] as $producto){
                     if($producto['sku'] == get_field('sku_lab', get_the_ID())){
-                        $mayoristas_producto[] = $mayorista;
+                        $mayoristas_producto[] = array(
+                            'title' => $mayorista['title'],
+                            'thumbnail' => $mayorista['thumbnail'],
+                        );
                     }
                 }
             }

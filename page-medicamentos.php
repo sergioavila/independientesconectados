@@ -34,14 +34,21 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                             $('#postsTable').DataTable({
                                 data: response,
                                 columns: [
-                                  //  { data: 'id' },
                                     { data: 'title' },
-                                   // { data: 'category' },
-                                    { data: 'sku' }
+                                    {
+                                        data: 'mayoristas',
+                                        render: function(data, type, row) {
+                                            var thumbnailsHtml = data.map(function(mayorista) {
+                                                return '<img src="' + mayorista.thumbnail + '" alt="' + mayorista.title + '" class="icon-mayorista" />';
+                                            }).join(' ');
+
+                                            return thumbnailsHtml;
+                                        }
+                                    }
                                 ],
                                 ordering: false,
-                                "bLengthChange" : false, //thought this line could hide the LengthMenu
-                                "bInfo": false, //thought this line could hide the "Showing X of Y entries"
+                                "bLengthChange" : false,
+                                "bInfo": false,
                             });
                         } else {
                             console.error('La respuesta no es válida:', response);
