@@ -179,6 +179,39 @@ function add_scripts() {
 add_action('wp_enqueue_scripts', 'add_scripts');
 
 function obtener_posts_json() {
+    //get all mayorista post type and meta producto
+    $args = array(
+        'post_type' => 'mayorista',
+        'posts_per_page' => -1,
+        'order' => 'ASC',
+        'orderby' => 'title',
+    );
+    $query = new WP_Query($args);
+    $mayoristas = array();
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $post_id = get_the_ID();
+            $post_title = get_the_title();
+            $post_thumbnail = get_the_post_thumbnail_url();
+            $productos = get_field('producto', get_the_ID());
+            $array_productos = array();
+            foreach($productos as $producto){
+                $array_productos[] = array(
+                    'title' => $producto['descripcion'],
+                    'sku' => $producto['sku']
+                );
+            }
+            $mayoristas[] = array(
+                'title' => $post_title,
+                'thumbnail' => $post_thumbnail,
+                'productos' => $array_productos,
+            );
+        }
+        wp_reset_postdata();
+    }
+
     $args = array(
         'post_type' => 'producto',
         'posts_per_page' => -1,
@@ -192,11 +225,10 @@ function obtener_posts_json() {
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
+            $mayoristas_producto = array();
             $query->the_post();
-
             $post_id = get_the_ID();
             $post_title = get_the_title();
-            $post_category = get_the_category();
             $sliders_producto = get_field('slider_producto', get_the_ID());
             $slider = '';
             foreach($sliders_producto as $slider){
@@ -205,10 +237,21 @@ function obtener_posts_json() {
                     break;
                 }
             }
+            foreach($mayoristas as $mayorista){
+                foreach($mayorista['productos'] as $producto){
+                    if($producto['sku'] == get_field('sku_lab', get_the_ID())){
+                        $mayoristas_producto[] = $mayorista;
+                    }
+                }
+            }
+
             $posts[] = array(
+                'id' => $post_id,
                 'title' => $post_title,
+                'sku' => get_field('sku_lab', get_the_ID()),
                 'thumbnail' => $slider,
                 'category' => '',
+                'mayoristas' => $mayoristas_producto,
             );
         }
     }

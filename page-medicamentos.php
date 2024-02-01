@@ -34,9 +34,10 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                             $('#postsTable').DataTable({
                                 data: response,
                                 columns: [
+                                  //  { data: 'id' },
                                     { data: 'title' },
                                    // { data: 'category' },
-                                    { data: 'thumbnail' }
+                                    { data: 'sku' }
                                 ],
                                 ordering: false,
                                 "bLengthChange" : false, //thought this line could hide the LengthMenu
