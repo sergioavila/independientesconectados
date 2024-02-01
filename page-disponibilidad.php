@@ -58,6 +58,15 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                                 ordering: false,
                                 "bLengthChange" : false,
                                 "bInfo": false,
+                                "language": {
+                                    "zeroRecords": "No se han encontrado productos disponibles",
+                                    paginate: {
+                                       first: "Primera",
+                                       last: "Última",
+                                       next: "Siguiente",
+                                       previous: "Anterior"
+                                    }
+                                }
                             });
                             jQuery("div.dataTables_filter").addClass("input-group");
                             jQuery("div.dataTables_filter input").addClass("form-control").attr("placeholder", "Busca tu medicamento...");
