@@ -255,6 +255,7 @@ function obtener_posts_json() {
                 'thumbnail' => $slider,
                 'category' => '',
                 'mayoristas' => $mayoristas_producto,
+                'permalink' => get_the_permalink(),
             );
         }
     }

@@ -228,4 +228,55 @@ margin-top: -2px;
     background-color: #fff;
     margin: 0 auto 15px;
     object-fit: contain;
+    margin-left: 8px;
+}
+#main #postsTable_filter,
+#main #postsTable_filter label{
+    width: 100%;
+    display: block;
+    text-indent: -9999px;
+    color: transparent;
+}
+#main #postsTable_filter input, #filtroInput{
+    padding: 8px 16px;
+    border-radius: 14px;
+    background-color: #ffffff;
+    width: 100%;
+    color: #000;
+    margin-bottom: 30px;
+    border-color: #0a0e77;
+    border-width: 2px;
+    background-image: url('search.png');
+    background-position: right center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+table.dataTable tbody th, table.dataTable tbody td{
+    padding: 10px 15px !important;
+}
+tbody{
+    border: 0 !important;
+}
+#main #postsTable_paginate{
+    display: block;
+    text-align: center;
+    padding: 15px 0;
+    float: none;
+}
+.btn.btn-product{
+    align-items: center;
+    background: #69B93D;
+    border-radius: 30px;
+    border: 2px solid transparent;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1.1em;
+    padding: 12px 20px;
+    text-align: center;
+    white-space: normal;
+}
+.card.card-search{
+    box-shadow: 0 2px 20px #DBDBDB;
 }
