@@ -5,6 +5,8 @@
     $advertencia_de_lectura = get_field('advertencia_de_lectura', get_the_ID());
     $contenidos = get_field('contenidos', get_the_ID());
     $sliders_producto = get_field('slider_producto', get_the_ID());
+    $descargable = get_field('descargable', get_the_ID());
+    $descargable_profesional = get_field('descargable_profesional', get_the_ID());
 ?>
 
 <div id="main">
@@ -48,12 +50,16 @@
                         </div>
                     </div>
                     <?php endif;?>
-                    <div class="descargas mt-5 mb-3">
-                        <a class="btn btn-primary" href="#">Descargar folleto paciente</a>
+                    <?php if(!empty($descargable) OR !empty($descargable_profesional)): ?>
+                    <div class="descargas mt-5">
+                        <?php if(!empty($descargable)): ?>
+                        <a class="btn btn-primary mb-3" href="<?php echo $descargable['url'];?>" download>Descargar folleto paciente</a>
+                        <?php endif;?>
+                        <?php if(!empty($descargable_profesional)): ?>
+                        <a class="btn btn-primary"  href="<?php echo $descargable_profesional['url'];?>" download>Descargar folleto profesional</a>
+                        <?php endif;?>
                     </div>
-                    <div class="descargas">
-                        <a class="btn btn-primary"  href="#">Descargar folleto profesional</a>
-                    </div>
+                    <?php endif;?>
                 </div>
                 <div class="col-lg-7 ps-lg-5">
                     <h1>

@@ -178,3 +178,48 @@ function add_scripts() {
 }
 add_action('wp_enqueue_scripts', 'add_scripts');
 
+function obtener_posts_json() {
+    $args = array(
+        'post_type' => 'producto',
+        'posts_per_page' => -1,
+        'order' => 'ASC',
+        'orderby' => 'title',
+    );
+
+    $query = new WP_Query($args);
+
+    $posts = array();
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            $post_id = get_the_ID();
+            $post_title = get_the_title();
+            $post_category = get_the_category();
+            $sliders_producto = get_field('slider_producto', get_the_ID());
+            $slider = '';
+            foreach($sliders_producto as $slider){
+                if($slider['tipo'] == 'img'){
+                    $slider = $slider['imagen']['sizes']['medium_large'];
+                    break;
+                }
+            }
+            $posts[] = array(
+                'title' => $post_title,
+                'thumbnail' => $slider,
+                'category' => '',
+            );
+        }
+    }
+
+    wp_reset_postdata();
+
+    header('Content-Type: application/json');
+    echo json_encode($posts);
+    exit;
+}
+
+add_action('wp_ajax_obtener_posts_json', 'obtener_posts_json');
+add_action('wp_ajax_nopriv_obtener_posts_json', 'obtener_posts_json');
+
