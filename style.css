@@ -156,3 +156,65 @@ margin-top: -2px;
 #bbpress-forums a, #bbpress-forums a:hover{
     color: #0a0e77!important;
 }
+#productCarousel {
+    position: relative;
+}
+#productCarousel .carousel-indicators{
+    position: relative;
+}
+#productCarousel .carousel-indicators [data-bs-target]{
+    width: 70px;
+    height: 70px;
+    display: block;
+    text-indent: initial;
+}
+.single-product h2{
+    font-weight: 700;
+}
+.single-product h1{
+    font-weight: 700;
+    line-height: 1.1em;
+    color: #005373;
+    font-size: 2.5rem;
+    margin-bottom: .7em;
+}
+.single-product h3{
+    font-weight: 700;
+    line-height: 1.1em;
+    color: #005373;
+    font-size: 1.5rem;
+    margin-bottom: .5em;
+}
+.single-product .product__list__item{
+    list-style: none;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+.single-product .product__list__item li{
+    position: relative;
+}
+.single-product .product__list__item li:before {
+    content: "";
+    height: 8px;
+    width: 8px;
+    background-color: #005373;
+    border-radius: 50%;
+    position: absolute;
+    left: -15px;
+    top: 8px;
+}
+.single-product .btn{
+    align-items: center;
+    background: #69B93D;
+    border-radius: 30px;
+    border: 2px solid transparent;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1.1em;
+    padding: 18px 30px;
+    text-align: center;
+    white-space: normal;
+}

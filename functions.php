@@ -172,8 +172,9 @@ add_shortcode('menu_login','menu_login');
 //add queue scripts to all pages
 function add_scripts() {
     wp_enqueue_script('jquery');
-    //get child template uri 
     wp_enqueue_script('child-template', get_stylesheet_directory_uri(). '/main.js', array('jquery'), '1.0.0', true);
-    //wp_enqueue_script('main', get_template_directory_uri(). '/main.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css', array(), '5.3.1', 'all');
+    wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js', array(), '5.3.1', true);
 }
 add_action('wp_enqueue_scripts', 'add_scripts');
+
