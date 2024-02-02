@@ -270,3 +270,75 @@ function obtener_posts_json() {
 add_action('wp_ajax_obtener_posts_json', 'obtener_posts_json');
 add_action('wp_ajax_nopriv_obtener_posts_json', 'obtener_posts_json');
 
+//add custom admin subpage to  wp-admin/edit.php?post_type=mayorista
+function add_custom_subpage() {
+    add_submenu_page(
+        'edit.php?post_type=mayorista',
+        'Actualizar stock',
+        'Actualizar stock',
+       'manage_options',
+        'add-stock',
+        'add_stock_page'
+    );
+}
+add_action('admin_menu', 'add_custom_subpage');
+
+//add add_stock_page
+function add_stock_page() {
+    global $wpdb;
+    $table_name = $wpdb->prefix. 'posts';
+    // require 'vendor/autoload.php'; // Carga la biblioteca PhpSpreadsheet
+    // use PhpOffice\PhpSpreadsheet\IOFactory;
+    ?>
+    <div class="wrap">
+        <h2>Cargar excel</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="excel" />
+            <input type="submit" name="submit" value="Cargar" />
+        </form>
+        <?php
+        //read excel file
+        // if (isset($_POST['submit'])) {
+        //     if (isset($_FILES['excel']) && $_FILES['excel']['error'] == 0) {
+        //         $fileTmpPath = $_FILES['excel']['tmp_name'];
+        //         $fileName = $_FILES['excel']['name'];
+        
+        //         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        //         $allowedExtensions = ['xls', 'xlsx'];
+        
+        //         if (in_array($fileExtension, $allowedExtensions)) {
+        //             $upload_dir = wp_upload_dir(); // Obtiene el directorio de carga de WordPress
+        //             $uploadPath = $upload_dir['path'] . '/' . 'uploaded_excel.' . $fileExtension;
+        
+        //             if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+        //                 $spreadsheet = IOFactory::load($uploadPath);
+        
+        //                 // Obtén la primera hoja del libro de trabajo
+        //                 $sheet = $spreadsheet->getActiveSheet();
+        
+        //                 // Obtén todos los datos de la hoja
+        //                 $data = $sheet->toArray();
+        
+        //                 // Crea una tabla HTML
+        //                 echo '<table border="1">';
+        //                 foreach ($data as $row) {
+        //                     echo '<tr>';
+        //                     foreach ($row as $cell) {
+        //                         echo '<td>' . $cell . '</td>';
+        //                     }
+        //                     echo '</tr>';
+        //                 }
+        //                 echo '</table>';
+        
+        //                 echo "Archivo cargado y leído correctamente.";
+        //             } else {
+        //                 echo "Error al mover el archivo a la ubicación deseada.";
+        //             }
+        //         } else {
+        //             echo "Extensión de archivo no permitida. Solo se permiten archivos Excel.";
+        //         }
+        //     } else {
+        //         echo "Error al cargar el archivo.";
+        //     }
+        // }
+}
