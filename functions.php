@@ -342,3 +342,186 @@ function add_stock_page() {
         //     }
         // }
 }
+
+//add html to header    
+function add_html_header() {
+    echo '<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(function(OneSignal) {
+        OneSignal.init({
+          appId: "d715473c-d954-4b70-94e8-d3564de38060",
+          safari_web_id: "web.onesignal.auto.68a9d4a9-72e3-41ba-a788-4f8badeb71ae",
+          notifyButton: {
+            enable: true,
+          },
+        });
+      });
+    </script>';
+}
+add_action('admin_head', 'add_html_header');
+
+function custom_breadcrumbs() {
+    $delimiter = '&raquo;';
+    $home = 'Inicio'; // Texto para el enlace 'Inicio'
+    $showCurrent = 1; // 1 - Mostrar el título actual de la página, 0 - No mostrar
+    $before = '<span class="">'; // Etiqueta antes de la miga de pan actual
+    $after = '</span>'; // Etiqueta después de la miga de pan actual
+
+    global $post;
+    $homeLink = get_bloginfo('url');
+
+    echo '<div id="" class="">';
+    echo '<a href="' . $homeLink . '">' . $home . '</a> ' . $delimiter . ' ';
+
+    if (is_category() || is_single()) {
+        $category = get_the_category();
+
+        if ($category) {
+            $category_id = $category[0]->cat_ID;
+            $category_parents = get_category_parents($category_id, true, ' ' . $delimiter . ' ');
+
+            if ($category_parents) {
+                echo $category_parents;
+            }
+        }
+    }
+
+    if (is_single()) {
+        echo $before . get_the_title() . $after;
+    } elseif (is_page() && !$post->post_parent) {
+        echo $before . get_the_title() . $after;
+    } elseif (is_page() && $post->post_parent) {
+        $parent_id = $post->post_parent;
+        $breadcrumbs = array();
+
+        while ($parent_id) {
+            $page = get_page($parent_id);
+            $breadcrumbs[] = '<a href="' . get_permalink($page->ID) . '">' . get_the_title($page->ID) . '</a>';
+            $parent_id = $page->post_parent;
+        }
+
+        $breadcrumbs = array_reverse($breadcrumbs);
+
+        foreach ($breadcrumbs as $crumb) {
+            echo $crumb . ' ' . $delimiter . ' ';
+        }
+    }
+
+    if (is_home()) {
+        if ($showCurrent == 1) echo $before . 'Blog' . $after;
+    }
+
+    echo '</div>';
+}
+//add shortcode [custom_breadcrumbs]
+add_shortcode('custom_breadcrumbs', 'custom_breadcrumbs');
+// bootstrap 5 wp_nav_menu walker
+class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
+{
+  private $current_item;
+  private $dropdown_menu_alignment_values = [
+    'dropdown-menu-start',
+    'dropdown-menu-end',
+    'dropdown-menu-sm-start',
+    'dropdown-menu-sm-end',
+    'dropdown-menu-md-start',
+    'dropdown-menu-md-end',
+    'dropdown-menu-lg-start',
+    'dropdown-menu-lg-end',
+    'dropdown-menu-xl-start',
+    'dropdown-menu-xl-end',
+    'dropdown-menu-xxl-start',
+    'dropdown-menu-xxl-end'
+  ];
+
+  function start_lvl(&$output, $depth = 0, $args = null)
+  {
+    $dropdown_menu_class[] = '';
+    foreach($this->current_item->classes as $class) {
+      if(in_array($class, $this->dropdown_menu_alignment_values)) {
+        $dropdown_menu_class[] = $class;
+      }
+    }
+    $indent = str_repeat("\t", $depth);
+    $submenu = ($depth > 0) ? ' sub-menu' : '';
+    $output .= "\n$indent<ul class=\"dropdown-menu$submenu " . esc_attr(implode(" ",$dropdown_menu_class)) . " depth_$depth\">\n";
+  }
+
+  function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+  {
+    $this->current_item = $item;
+
+    $indent = ($depth) ? str_repeat("\t", $depth) : '';
+
+    $li_attributes = '';
+    $class_names = $value = '';
+
+    $classes = empty($item->classes) ? array() : (array) $item->classes;
+
+    $classes[] = ($args->walker->has_children) ? 'dropdown' : '';
+    $classes[] = 'nav-item';
+    $classes[] = 'nav-item-' . $item->ID;
+    if ($depth && $args->walker->has_children) {
+      $classes[] = 'dropdown-menu dropdown-menu-end';
+    }
+
+    $class_names =  join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
+    $class_names = ' class="' . esc_attr($class_names) . '"';
+
+    $id = apply_filters('nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args);
+    $id = strlen($id) ? ' id="' . esc_attr($id) . '"' : '';
+
+    $output .= $indent . '<li ' . $id . $value . $class_names . $li_attributes . '>';
+
+    $attributes = !empty($item->attr_title) ? ' title="' . esc_attr($item->attr_title) . '"' : '';
+    $attributes .= !empty($item->target) ? ' target="' . esc_attr($item->target) . '"' : '';
+    $attributes .= !empty($item->xfn) ? ' rel="' . esc_attr($item->xfn) . '"' : '';
+    $attributes .= !empty($item->url) ? ' href="' . esc_attr($item->url) . '"' : '';
+
+    $active_class = ($item->current || $item->current_item_ancestor || in_array("current_page_parent", $item->classes, true) || in_array("current-post-ancestor", $item->classes, true)) ? 'active' : '';
+    $nav_link_class = ( $depth > 0 ) ? 'dropdown-item ' : 'nav-link ';
+    $attributes .= ( $args->walker->has_children ) ? ' class="'. $nav_link_class . $active_class . ' dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' : ' class="'. $nav_link_class . $active_class . '"';
+
+    $item_output = $args->before;
+    $item_output .= '<a' . $attributes . '>';
+    $item_output .= $args->link_before . apply_filters('the_title', $item->title, $item->ID) . $args->link_after;
+    $item_output .= '</a>';
+    $item_output .= $args->after;
+
+    $output .= apply_filters('walker_nav_menu_start_el', $item_output, $item, $depth, $args);
+  }
+}
+// register a new menu
+register_nav_menu('main-menu', 'Main menu');
+//add custom header site logo, menu and search function
+function custom_header_setup() { ?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 g-0">
+            <div class="navbar navbar-default">
+                <div class="navbar-header">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="navbar-brand">
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo.png" width="230" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>">
+                    </a>
+                </div>
+                <div class="menu-principal">
+                    <?php
+                    wp_nav_menu(array(
+                        'theme_location' => 'main-menu',
+                        'container' => false,
+                        'menu_class' => '',
+                        'fallback_cb' => '__return_false',
+                        'items_wrap' => '<ul id="%1$s" class="navbar-nav d-flex flex-row justify-content-between mb-md-0 %2$s">%3$s</ul>',
+                        'depth' => 2,
+                        'walker' => new bootstrap_5_wp_nav_menu_walker()
+                    ));?>
+                </div>
+                <?php echo do_shortcode('[menu_login]');?>
+            </div>
+        </div>
+</div>
+<?php }
+add_action('bootstrap_header', 'custom_header_setup');
+// add shortcode custom_header_setup
+add_shortcode('custom_header_setup', 'custom_header_setup');

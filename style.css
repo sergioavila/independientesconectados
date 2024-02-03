@@ -70,7 +70,6 @@ margin-top: -2px;
 }
 .logedinuser{
     display: flex;
-    width: 100%;
     justify-content: flex-end;
     align-items: center;
     margin-top: 1.2rem;
@@ -279,4 +278,9 @@ tbody{
 }
 .card.card-search{
     box-shadow: 0 2px 20px #DBDBDB;
+}
+.menu-principal .nav-link{
+    color: #0a0e77;
+    font-weight: 700;
+    padding: 0 15px;
 }
