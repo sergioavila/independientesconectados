@@ -362,17 +362,23 @@ function add_html_header() {
 add_action('admin_head', 'add_html_header');
 
 function custom_breadcrumbs() {
-    $delimiter = '&raquo;';
+    $delimiter = ' ';
     $home = 'Inicio'; // Texto para el enlace 'Inicio'
     $showCurrent = 1; // 1 - Mostrar el título actual de la página, 0 - No mostrar
-    $before = '<span class="">'; // Etiqueta antes de la miga de pan actual
-    $after = '</span>'; // Etiqueta después de la miga de pan actual
+    $before = '<li class="breadcrumb-item">'; // Etiqueta antes de la miga de pan actual
+    $after = '</li>'; // Etiqueta después de la miga de pan actual
+
+    //skip if home page
+    if (is_front_page()) {
+        return;
+    }
 
     global $post;
     $homeLink = get_bloginfo('url');
 
-    echo '<div id="" class="">';
-    echo '<a href="' . $homeLink . '">' . $home . '</a> ' . $delimiter . ' ';
+    echo '<nav aria-label="breadcrumb">';
+    echo '<ol class="breadcrumb">';
+    echo '<li class="breadcrumb-item"><a href="' . $homeLink . '">' . $home . '</a></li>' . $delimiter . ' ';
 
     if (is_category() || is_single()) {
         $category = get_the_category();
@@ -388,7 +394,11 @@ function custom_breadcrumbs() {
     }
 
     if (is_single()) {
-        echo $before . get_the_title() . $after;
+        if(bbp_get_forum_id()){
+            echo '<li class="breadcrumb-item"><a href="/foro">FORO</a></li><li class="breadcrumb-item"><a href="' . get_permalink(bbp_get_forum_id()) . '">' . bbp_get_forum_title() . '</a></li>' . $delimiter . ' ';
+        }else {
+            echo $before . get_the_title() . $after;
+        }
     } elseif (is_page() && !$post->post_parent) {
         echo $before . get_the_title() . $after;
     } elseif (is_page() && $post->post_parent) {
@@ -411,8 +421,8 @@ function custom_breadcrumbs() {
     if (is_home()) {
         if ($showCurrent == 1) echo $before . 'Blog' . $after;
     }
-
-    echo '</div>';
+    echo '</ol>';
+    echo '</nav>';
 }
 //add shortcode [custom_breadcrumbs]
 add_shortcode('custom_breadcrumbs', 'custom_breadcrumbs');
@@ -519,6 +529,9 @@ function custom_header_setup() { ?>
                 </div>
                 <?php echo do_shortcode('[menu_login]');?>
             </div>
+        </div>
+        <div class="col-12">
+            <?php echo custom_breadcrumbs();?>
         </div>
 </div>
 <?php }

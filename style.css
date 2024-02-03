@@ -72,7 +72,6 @@ margin-top: -2px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 1.2rem;
 }
 .logedinuser p{
     display: flex;
@@ -279,8 +278,24 @@ tbody{
 .card.card-search{
     box-shadow: 0 2px 20px #DBDBDB;
 }
+.menu-principal .nav-item{
+    margin: 0 4px;
+
+}
 .menu-principal .nav-link{
-    color: #0a0e77;
+    color: #0a0e77 !important;
     font-weight: 700;
     padding: 0 15px;
+    border-bottom: 4px solid transparent;
+}
+.menu-principal .nav-link:hover,
+.menu-principal .nav-link.active{
+    border-bottom: 4px solid #0a0e77;
+}
+.breadcrumb .breadcrumb-item a,
+.breadcrumb .breadcrumb-item{
+    color: #0A0E77;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
 }
