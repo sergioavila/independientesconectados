@@ -299,3 +299,6 @@ tbody{
     font-size: 12px;
     text-transform: uppercase;
 }
+header.et-l.et-l--header{
+    display: none;
+}
