@@ -13,16 +13,17 @@ if ( !function_exists( 'chld_thm_cfg_locale_css' ) ):
     }
 endif;
 add_filter( 'locale_stylesheet_uri', 'chld_thm_cfg_locale_css' );
-         
 if ( !function_exists( 'child_theme_configurator_css' ) ):
     function child_theme_configurator_css() {
         wp_enqueue_style( 'chld_thm_cfg_ext1', 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap' );
+        //enquehue bbpress.css
+        wp_enqueue_style( 'chld_thm_cfg_ext2', get_stylesheet_directory_uri(). '/bbpress.css' );
     }
 endif;
 add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 99999998 );
 
 // END ENQUEUE PARENT ACTION
-// 
+//
 
 function buscar_rut($rut) {
     global $wpdb;
@@ -156,7 +157,7 @@ function menu_login() {
     ob_start();
     if (is_user_logged_in()) {
         $mostrar_formulario = ' <div class="logedinuser">
-            <p><span class="text">Tus puntos:</span><span class="puntos">12.600</span></p>
+            <p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="quiz" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p>
             <a href="#">
                 <img src="https://placehold.co/300x300.png" />
             </a>
