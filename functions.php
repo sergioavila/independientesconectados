@@ -157,8 +157,8 @@ function menu_login() {
     ob_start();
     if (is_user_logged_in()) {
         $mostrar_formulario = ' <div class="logedinuser">
-            <p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="gamepress" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p>
-            <a href="#">
+        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="gamepress" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
+            <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tu cuenta">
                 <img src="https://placehold.co/300x300.png" />
             </a>
         </div>';

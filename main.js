@@ -6,4 +6,10 @@ jQuery(document).ready(function () {
   jQuery("#wppb-login-wrap #user_login").change(function () {
     jQuery("#wppb-login-wrap #user_pass").val(jQuery(this).val());
   });
+  const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"]'
+  );
+  const tooltipList = [...tooltipTriggerList].map(
+    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+  );
 });

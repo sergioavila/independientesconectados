@@ -302,3 +302,8 @@ tbody{
 header.et-l.et-l--header{
     display: none;
 }
+.profile-user .avatar{
+    width: 100px;
+    height: 100px;
+    margin-right: 30px
+}
