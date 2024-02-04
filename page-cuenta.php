@@ -4,17 +4,23 @@ get_header();
 
 $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
 acf_form_head();
-$avatar = get_field('avatar');
+
 ?>
 <h2 class="">Mi cuenta</h2>
 <div id="main-content">
     <div class="container">
         <div id="content-area" class="profile-user">
             <?php if ( is_user_logged_in() ) {?>
+                <?php
+                    $user_id = get_current_user_id();
+                    $avatar = get_avatar($user_id) ? get_avatar($user_id) : 'https://placehold.co/300x300.png';
+                    ?>
                 <div class="row">
                     <div class="col ">
                         <div class="d-flex align-items-center justify-content-center">
-                            <img src="<?php echo $avatar['url']; ?>" alt="" height="120" width="120" class="avatar rounded-circle border object-fit-cover border">
+                            <div height="120" width="120" class="avatar rounded-circle border object-fit-cover border">
+                                <?php echo $avatar; ?>
+                            </div>
                             <div class="">
                                 <h3 class="card-title color-blue">Hola <?php echo wp_get_current_user()->display_name; ?></h3>
                                 <h4 class="color-blue">Tu farmacia: XXX</h4>

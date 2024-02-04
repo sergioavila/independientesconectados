@@ -154,11 +154,12 @@ function menu_login() {
     $mostrar_formulario = ' <div class="logedinuser"><a href="/ingresar/">INGRESAR</a></div>';
     ob_start();
     if (is_user_logged_in()) {
-        $avatar = get_field('avatar') ? get_field('avatar')['url'] : 'https://placehold.co/300x300.png';
+        $user_id = get_current_user_id();
+        $avatar = get_avatar($user_id) ? get_avatar($user_id) : 'https://placehold.co/300x300.png';
         $mostrar_formulario = ' <div class="logedinuser">
         <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
             <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tu cuenta">
-                <img src="'.$avatar.'" class="border" />
+                '.$avatar.'
             </a>
         </div>';
     }
