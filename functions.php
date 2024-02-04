@@ -16,8 +16,6 @@ add_filter( 'locale_stylesheet_uri', 'chld_thm_cfg_locale_css' );
 if ( !function_exists( 'child_theme_configurator_css' ) ):
     function child_theme_configurator_css() {
         wp_enqueue_style( 'chld_thm_cfg_ext1', 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap' );
-        //enquehue bbpress.css
-        wp_enqueue_style( 'chld_thm_cfg_ext2', get_stylesheet_directory_uri(). '/bbpress.css' );
     }
 endif;
 add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 99999998 );
@@ -156,10 +154,11 @@ function menu_login() {
     $mostrar_formulario = ' <div class="logedinuser"><a href="/ingresar/">INGRESAR</a></div>';
     ob_start();
     if (is_user_logged_in()) {
+        $avatar = get_field('avatar') ? get_field('avatar')['url'] : 'https://placehold.co/300x300.png';
         $mostrar_formulario = ' <div class="logedinuser">
-        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="gamepress" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
+        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
             <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tu cuenta">
-                <img src="https://placehold.co/300x300.png" />
+                <img src="'.$avatar.'" class="border" />
             </a>
         </div>';
     }
@@ -395,11 +394,12 @@ function custom_breadcrumbs() {
     }
 
     if (is_single()) {
-        if(bbp_get_forum_id()){
-            echo '<li class="breadcrumb-item"><a href="/foro">FORO</a></li><li class="breadcrumb-item"><a href="' . get_permalink(bbp_get_forum_id()) . '">' . bbp_get_forum_title() . '</a></li>' . $delimiter . ' ';
-        }else {
-            echo $before . get_the_title() . $after;
-        }
+        echo $before . get_the_title() . $after;
+        // if(bbp_get_forum_id()){
+        //     echo '<li class="breadcrumb-item"><a href="/foro">FORO</a></li><li class="breadcrumb-item"><a href="' . get_permalink(bbp_get_forum_id()) . '">' . bbp_get_forum_title() . '</a></li>' . $delimiter . ' ';
+        // }else {
+        //     echo $before . get_the_title() . $after;
+        // }
     } elseif (is_page() && !$post->post_parent) {
         echo $before . get_the_title() . $after;
     } elseif (is_page() && $post->post_parent) {

@@ -88,6 +88,7 @@ margin-top: -2px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    margin-top: 8px;
 }
 .logedinuser p span.text{
     display: block;
@@ -303,7 +304,51 @@ header.et-l.et-l--header{
     display: none;
 }
 .profile-user .avatar{
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     margin-right: 30px
+}
+.profile-user a{
+    color: #0a0e77;
+}
+.profile-user .color-blue{
+    color: #0A0E77;
+    font-size: 18px;
+    font-weight: 700;
+}
+.profile-user .puntos-acumulados{
+    color: #0A0E77;
+    display: flex;
+    border-radius: 15px;
+    border: 2px solid #0A0E77;
+    width: 100%;
+    max-width: 60%;
+    margin: 30px auto;
+    justify-content: space-between;
+    font-size: 22px;
+    overflow: hidden;
+}
+.profile-user .puntos-acumulados h4{
+    padding: 20px 60px;
+    flex-grow: 1;
+    font-size: 22px;
+    margin: 0;
+    line-height: 1;
+    color: #0A0E77;
+}
+.profile-user .puntos-acumulados span.puntaje{
+    padding: 20px 60px;
+    position: relative;
+    width: auto;
+    background-color: #0A0E77;
+    color: #fff;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.profile-user .puntos-acumulados .gamipress-inline-points-wrapper, .profile-user .puntos-acumulados .gamipress-inline-points, .profile-user .puntos-acumulados .gamipress-inline-points-amount{
+    padding: 0;
+    margin: 0;
+}
+.profile-user #gamipress-earnings-table{
+    color:#0A0E77;
 }

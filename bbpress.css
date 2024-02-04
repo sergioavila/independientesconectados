@@ -382,10 +382,10 @@ div.bbp-forum-header, div.bbp-topic-header, div.bbp-reply-header {
 #forums-list-0 .bbp-forum-info .bbp-forum-content {
 	display: none;
 }
-.bbpress .entry-content .et_pb_row, .et_pb_slider .et_pb_container, .et_pb_fullwidth_section .et_pb_title_container, .et_pb_fullwidth_section .et_pb_title_featured_container, .et_pb_fullwidth_header:not(.et_pb_fullscreen) .et_pb_fullwidth_header_container{
+/* .bbpress .entry-content .et_pb_row, .et_pb_slider .et_pb_container, .et_pb_fullwidth_section .et_pb_title_container, .et_pb_fullwidth_section .et_pb_title_featured_container, .et_pb_fullwidth_header:not(.et_pb_fullscreen) .et_pb_fullwidth_header_container{
 	max-width: 100% !important;
 	width: 100%;
-}
+} */
 #bbpress-forums{
 	padding: 20px;
 }
