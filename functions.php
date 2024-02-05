@@ -791,3 +791,19 @@ function footer_bar() {
         </script>';
     }
 }
+
+//create custom html code shortcode
+add_shortcode('custom_html', 'custom_html_shortcode');
+function custom_html_shortcode() {
+    $html = '</footer>';
+    if (get_post_type() == 'question') {
+        $html = $html.'<script>
+        jQuery(document).ready(function($) {
+            //last navlink
+            var last_navlink = $("li:last-child .nav-link");
+            last_navlink.addClass("active");
+        });
+        </script>';
+    }
+    return $html;
+}
