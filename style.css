@@ -323,6 +323,12 @@ header.et-l.et-l--header{
     overflow: hidden;
     border: 1px solid #ddd;
 }
+#anspress .avatar{
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
 .profile-user a{
     color: #0a0e77;
 }
@@ -372,7 +378,7 @@ body #anspress .ap-btn.active{
     background-color: #0a0e77;
     color: #fff;
 }
-body #anspress .ap-filter-toggle{
+body #anspress .ap-filter-toggle, body #anspress a{
     color: #0A0E77;
 }
 body .footer-bar{
@@ -399,4 +405,10 @@ body .footer-bar .card-blue {
 }
 body .footer-bar .card-blue h4{
     color: #fff;
+}
+body #left-area h1.main_title {
+    color: #0a0e77;
+}
+body #anspress a.ap-questions-hyperlink{
+    color: #0a0e77;
 }

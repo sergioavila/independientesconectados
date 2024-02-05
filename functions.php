@@ -402,12 +402,13 @@ function custom_breadcrumbs() {
     }
 
     if (is_single()) {
+       
+        //if is type question
+        if ($post->post_type == 'question') {
+            echo $before . '<a href="/foro">Foro</a>' . $after;
+        }
         echo $before . get_the_title() . $after;
-        // if(bbp_get_forum_id()){
-        //     echo '<li class="breadcrumb-item"><a href="/foro">FORO</a></li><li class="breadcrumb-item"><a href="' . get_permalink(bbp_get_forum_id()) . '">' . bbp_get_forum_title() . '</a></li>' . $delimiter . ' ';
-        // }else {
-        //     echo $before . get_the_title() . $after;
-        // }
+        
     } elseif (is_page() && !$post->post_parent) {
         echo $before . get_the_title() . $after;
     } elseif (is_page() && $post->post_parent) {
