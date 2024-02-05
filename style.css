@@ -412,3 +412,52 @@ body #left-area h1.main_title {
 body #anspress a.ap-questions-hyperlink{
     color: #0a0e77;
 }
+body #whatsappsupport{
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    z-index: 999999;
+    width: 70px;
+    border-radius: 50%;
+    height: 70px;
+    background-color: #69B93D;
+    cursor: pointer;
+}
+body .profile-login .input{
+    border: 3px solid #0A0E77!important;
+    font-size: 16px!important;
+    height: auto!important;
+    margin: 0!important;
+    outline: 0!important;
+    padding: 15px!important;
+    width: 100%!important;
+    background-color: #fff!important;
+    color: #000!important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset!important;
+    margin-bottom: 30px!important;
+    border-radius: 30px!important;
+}
+#login-form{
+    max-width: 400px;
+    margin: 0 auto;
+}
+.profile-login button{
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Roboto,sans-serif;
+    font-weight: 0;
+    font-size: 14px;
+    color: #fff;
+    background-color: #0A0E77;
+    padding: 10px 30px;
+    border: none;
+    box-shadow: rgb(0,0,0) 0px 0px 0px 0px;
+    border-radius: 10px;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    text-align: center!important;
+}

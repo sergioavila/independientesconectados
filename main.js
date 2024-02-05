@@ -8,6 +8,7 @@ jQuery(document).ready(function () {
   jQuery(document).on("click", "#login-form #submit", function () {
     jQuery("#login-form #submit").prop("value", "Buscando...");
     jQuery("#login-form #submit").prop("disabled", true);
+    jQuery("#login-error").html("");
     jQuery.ajax({
       url: ajaxurl,
       type: "POST",
@@ -17,20 +18,18 @@ jQuery(document).ready(function () {
       },
       success: function (response) {
         if (response.success) {
-          console.log("success", response);
           window.location.reload();
         } else {
-          console.log("error", response);
           jQuery("#login-form #submit").prop("value", "Buscar");
           jQuery("#login-form #submit").prop("disabled", false);
-          jQuery("#login-form #login-error").show();
+          jQuery("#login-error").html(response.message).show();
         }
       },
       error: function (response) {
         console.log("error", response);
         jQuery("#login-form #submit").prop("value", "Buscar");
         jQuery("#login-form #submit").prop("disabled", false);
-        jQuery("#login-form #login-error").show();
+        jQuery("#login-error").show();
       },
     });
     return false;

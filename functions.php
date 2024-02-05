@@ -26,131 +26,6 @@ add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 99999998 );
 // END ENQUEUE PARENT ACTION
 //
 
-function buscar_rut($rut) {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'register_propt'; 
-    $result = $wpdb->get_row($wpdb->prepare("SELECT NOMBRE, APELLIDOS FROM $table_name WHERE RUT = %s", $rut));
-    return $result;
-}
-
-function mostrar_formulario_registro() {
-    $nombre = '';
-    $apellidos = '';
-    $mostrar_formulario = false; // Inicialmente, el formulario de registro está oculto
-
-    if (isset($_POST['submit_registro'])) {
-        // Validar y procesar el formulario de registro
-        $rut = sanitize_text_field($_POST['rut']);
-        $nombre = sanitize_text_field($_POST['nombre']);
-        $apellidos = sanitize_text_field($_POST['apellidos']);
-        $email = sanitize_email($_POST['email']);
-        $fecha_nacimiento = sanitize_text_field($_POST['fecha_nacimiento']);
-        $rut_farmacia = sanitize_text_field($_POST['rut_farmacia']);
-        $sucursal = sanitize_text_field($_POST['sucursal']);
-        $password = sanitize_text_field($_POST['password']);
-
-        // Validar la contraseña
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
-            echo 'La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula y un número.';
-            return;
-        }
-
-        // Crear un nuevo usuario en WordPress
-        $user_id = wp_insert_user(array(
-            'user_login' => $email,
-            'user_email' => $email,
-            'user_pass' => $password,
-            'first_name' => $nombre,
-            'last_name' => $apellidos,
-            'role' => 'subscriber'
-        ));
-
-        if (is_wp_error($user_id)) {
-            echo 'Error al registrar el usuario: ' . $user_id->get_error_message();
-        } else {
-            // Registro exitoso
-            echo 'Usuario registrado exitosamente';
-        }
-    } elseif (isset($_POST['rut'])) {
-        // Procesar el formulario de búsqueda
-        $rut = sanitize_text_field($_POST['rut']);
-        $registro = buscar_rut($rut);
-
-        if ($registro) {
-            $nombre = $registro->NOMBRE;
-            $apellidos = $registro->APELLIDOS;
-            $mostrar_formulario = true; // Mostrar el formulario de registro si se encuentra un RUT válido
-        } else {
-            // El RUT no es válido, redirigir a una nueva página
-            $url_pagina_contacto = home_url('/contacto-registro'); // Reemplaza '/pagina-de-contacto' con la URL de tu página de contacto
-            wp_redirect($url_pagina_contacto);
-            exit;
-        }
-    }
-
-    ob_start();
-
-function mostrar_formulario_contacto() {
-    ob_start();
-    ?>
-    <div id="formulario-contacto">
-        <form action="" method="post">
-            <!-- Agrega los campos y el diseño que necesitas para el formulario de contacto -->
-            <input type="text" name="nombre_contacto" class="inputForm" placeholder="Nombre" required>
-            <input type="email" name="email_contacto" class="inputForm" placeholder="Email" required>
-            <textarea name="mensaje_contacto" class="inputForm" placeholder="Mensaje" required></textarea>
-            <input type="submit" name="submit_contacto" class="btnReg" value="Enviar Mensaje">
-        </form>
-    </div>
-    <?php
-    return ob_get_clean();
-}
-
-
-    ?>
-    <div id="formulario-busqueda" <?php echo $mostrar_formulario ? 'style="display: none;"' : ''; ?>>
-        <form action="" method="post">
-            <input type="text" name="rut" class="inputForm" placeholder="RUT" required>
-            <input type="submit" class="btnReg" value="Buscar">
-        </form>
-    </div>
-
-    <div id="formulario-registro" <?php echo $mostrar_formulario ? '' : 'style="display: none;"'; ?>>
-        <form action="" method="post">
-            <input type="text" name="rut" class="inputForm" placeholder="RUT" value="<?php echo esc_attr($rut); ?>" required>
-            <input type="text" name="nombre" class="inputForm" placeholder="Nombre" value="<?php echo esc_attr($nombre); ?>" required>
-            <input type="text" name="apellidos" class="inputForm" placeholder="Apellidos" value="<?php echo esc_attr($apellidos); ?>" required>
-            <input type="email" name="email" class="inputForm" placeholder="Email" required>
-            <input type="password" name="password" class="inputForm" placeholder="Contraseña" required>
-            <input type="date" name="fecha_nacimiento" class="inputForm" placeholder="Fecha de nacimiento" required>
-            <input type="text" name="rut_farmacia" class="inputForm" placeholder="RUT Farmacia" required>
-            <input type="text" name="sucursal" class="inputForm" placeholder="Sucursal" required>
-            <input type="submit" name="submit_registro" class="btnReg" value="Registrarse">
-        </form>
-    </div>
-
-    
-
-
-    <script>
-    // JavaScript para mostrar u ocultar los formularios según la variable $mostrar_formulario
-    document.addEventListener('DOMContentLoaded', function() {
-        var formularioBusqueda = document.getElementById('formulario-busqueda');
-        var formularioRegistro = document.getElementById('formulario-registro');
-        
-        if (<?php echo $mostrar_formulario ? 'true' : 'false'; ?>) {
-            formularioBusqueda.style.display = 'none';
-            formularioRegistro.style.display = 'block';
-        } else {
-            formularioBusqueda.style.display = 'block';
-            formularioRegistro.style.display = 'none';
-        }
-    });
-    </script>
-    <?php
-    return ob_get_clean();
-}
-add_shortcode('formulario_registro', 'mostrar_formulario_registro');
 
 //create shortcode for login or profile if is logged
 function menu_login() {
@@ -587,8 +462,8 @@ function get_quimico(){
             );
             $user = wp_signon($credentials, false);
             if (is_wp_error($user)) {
-                echo 'Error: ' . $user->get_error_message();
-                return;
+                $data['success'] = false;
+                $data['message'] = 'Ha ocurrido un error al iniciar sesión';
             }
             else{
                 wp_set_current_user($loginuserid);
@@ -795,7 +670,7 @@ function footer_bar() {
 //create custom html code shortcode
 add_shortcode('custom_html', 'custom_html_shortcode');
 function custom_html_shortcode() {
-    $html = '</footer>';
+    $html = '</footer><div id="whatsappsupport"></div>';
     if (get_post_type() == 'question') {
         $html = $html.'<script>
         jQuery(document).ready(function($) {

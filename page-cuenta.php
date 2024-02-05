@@ -7,7 +7,7 @@ acf_form_head();
 
 ?>
 <h2 class="">Mi cuenta</h2>
-<div id="main-content">
+<div <?php echo ( is_user_logged_in() ) ? 'id="main-content"' : 'class="my-md-5 py-md-5"'; ?> >
     <div class="container">
         <div id="content-area" class="profile-user">
             <?php if ( is_user_logged_in() ) {?>
@@ -26,23 +26,9 @@ acf_form_head();
                                 <h4 class="color-blue">Tu farmacia: XXX</h4>
                                 <h5>Rut: xxx</h5>
                                 <a href="#" class="link" data-bs-toggle="modal" data-bs-target="#exampleModal">Actualizar información <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(10,14,119,1)"><path d="M10 6V8H5V19H16V14H18V20C18 20.5523 17.5523 21 17 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6H10ZM21 3V12L17.206 8.207L11.2071 14.2071L9.79289 12.7929L15.792 6.793L12 3H21Z"></path></svg></a>
+                                <div class="mt-3">
                                 <a href="<?php echo wp_logout_url( home_url() ); ?>" class="link">Cerrar sesión</a>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar mis datos</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <?php echo update_user_info_form(); ?>
-                                        </div>
-                                        </div>
-                                    </div>
                                 </div>
-                                <?php //acf_form(); ?>
                             </div>
                         </div>
                         <div class="puntos-acumulados">
@@ -61,12 +47,26 @@ acf_form_head();
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar mis datos</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <?php echo update_user_info_form(); ?>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             <?php } else {?>
-                <div class="pb-5">
-                <form action="" id="login-form">
-                    <input type="text" id="user_login">
-                    <button id="submit">Enviar</button>
-                </form>
+                <div class="pb-5 text-center profile-login">
+                    <form id="login-form">
+                        <input type="text" id="user_login" class="form-control input" placeholder="RUT">
+                        <button id="submit">Enviar</button>
+                    </form>
+                    <div id="login-error"></div>
                 </div>
            <?php  } ?>
         </div>
