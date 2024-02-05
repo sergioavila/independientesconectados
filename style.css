@@ -47,7 +47,13 @@ margin-top: -2px;
 
 }
 */
-
+body #main-content .container:before{
+    display: none !important;
+}
+body #left-area{
+    width: 100% !important;
+    padding: 0 0 50px 0!important;
+}
 .ingresar a {
     border-radius: 5px!important;
     color: #fff!important;
@@ -89,6 +95,7 @@ margin-top: -2px;
     height: 50px;
     border-radius: 50%;
     margin-top: 8px;
+    border: 1px solid #ddd;
 }
 .logedinuser p span.text{
     display: block;
@@ -96,11 +103,15 @@ margin-top: -2px;
 }
 .logedinuser p span.puntos{
     display: block;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
     background-color: #0a0e77;
     color: #fff;
     padding: 10px 20px;
+}
+.logedinuser a.btn-ingresar{
+    background-color: #0a0e77;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
 }
 #wppb-login-wrap{
     margin: 0 auto;
@@ -306,7 +317,11 @@ header.et-l.et-l--header{
 .profile-user .avatar{
     width: 120px;
     height: 120px;
-    margin-right: 30px
+    margin-right: 30px;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #ddd;
 }
 .profile-user a{
     color: #0a0e77;
@@ -342,8 +357,8 @@ header.et-l.et-l--header{
     width: auto;
     background-color: #0A0E77;
     color: #fff;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+    display: flex;
+    align-items: center;
 }
 .profile-user .puntos-acumulados .gamipress-inline-points-wrapper, .profile-user .puntos-acumulados .gamipress-inline-points, .profile-user .puntos-acumulados .gamipress-inline-points-amount{
     padding: 0;
@@ -351,4 +366,37 @@ header.et-l.et-l--header{
 }
 .profile-user #gamipress-earnings-table{
     color:#0A0E77;
+}
+body #anspress .ap-list-head .ap-btn-ask,
+body #anspress .ap-btn.active{
+    background-color: #0a0e77;
+    color: #fff;
+}
+body #anspress .ap-filter-toggle{
+    color: #0A0E77;
+}
+body .footer-bar{
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    height: 40vh;
+    position: fixed;
+    bottom: -40vh;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    transition: all 0.5s ease;
+    box-shadow: 0px -1px 10px 0px rgba(0,0,0,0.1);
+}
+body .footer-bar.show{
+    bottom: 0;
+}
+body .footer-bar .card-blue {
+    background-color: #0a0e77;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+}
+body .footer-bar .card-blue h4{
+    color: #fff;
 }

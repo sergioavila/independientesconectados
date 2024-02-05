@@ -1,9 +1,12 @@
 <?php
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
-
+add_filter( 'use_widgets_block_editor', '__return_false' );
 // BEGIN ENQUEUE PARENT ACTION
 // AUTO GENERATED - Do not modify or remove comment markers above or below:
+
+    //load jquery
+    wp_enqueue_script( 'jquery' );
 
 if ( !function_exists( 'chld_thm_cfg_locale_css' ) ):
     function chld_thm_cfg_locale_css( $uri ){
@@ -151,17 +154,19 @@ add_shortcode('formulario_registro', 'mostrar_formulario_registro');
 
 //create shortcode for login or profile if is logged
 function menu_login() {
-    $mostrar_formulario = ' <div class="logedinuser"><a href="/ingresar/">INGRESAR</a></div>';
+    $mostrar_formulario = ' <div class="logedinuser"><a href="/cuenta/" class="btn-ingresar">INGRESAR</a></div>';
     ob_start();
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
         $avatar = get_avatar($user_id) ? get_avatar($user_id) : 'https://placehold.co/300x300.png';
+        $logout_link = wp_logout_url(home_url('/'));
         $mostrar_formulario = ' <div class="logedinuser">
-        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
+        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" user_id="'.$user_id.'" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
             <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tu cuenta">
                 '.$avatar.'
             </a>
         </div>';
+        
     }
     ob_start();
         echo $mostrar_formulario;
@@ -344,7 +349,7 @@ function add_stock_page() {
         // }
 }
 
-//add html to header    
+//add html to header
 function add_html_header() {
     echo '<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -359,8 +364,10 @@ function add_html_header() {
         });
       });
     </script>';
+    echo '<script>const ajaxurl = "'. admin_url('admin-ajax.php'). '";</script>';
 }
-add_action('admin_head', 'add_html_header');
+//add html to header site
+add_action('wp_head', 'add_html_header');
 
 function custom_breadcrumbs() {
     $delimiter = ' ';
@@ -540,3 +547,246 @@ function custom_header_setup() { ?>
 add_action('bootstrap_header', 'custom_header_setup');
 // add shortcode custom_header_setup
 add_shortcode('custom_header_setup', 'custom_header_setup');
+
+//get post type quimico if rut acf exist
+function get_quimico(){
+    $data = array();
+    if (empty($_POST['rut'])) {
+        echo 'Error: No se envió el rut';
+        return;
+    }
+
+    $rut = sanitize_text_field($_POST['rut']);
+    $post_type = 'quimico';
+
+    $args = array(
+        'post_type' => $post_type,
+        'posts_per_page' => 1,
+        'meta_key' => 'rut',
+        'meta_value' => $rut,
+        'meta_compare' => '='
+    );
+
+    $query = new WP_Query($args);
+    if ($query->have_posts()) {
+        $query->the_post();
+        $post_id = get_the_ID();
+        $loginuserid = get_field('user_id', $post_id);
+        if ( !$loginuserid) {
+            echo 'No se encontró el usuario';
+            return;
+        }
+        else{
+            //$rut menos dos digitos
+            $rut_2 = substr($rut, 0, -2);
+            $credentials = array(
+                'user_login' => $rut,
+                'user_password' => $rut_2,
+                'remember' => true
+            );
+            $user = wp_signon($credentials, false);
+            if (is_wp_error($user)) {
+                echo 'Error: ' . $user->get_error_message();
+                return;
+            }
+            else{
+                wp_set_current_user($loginuserid);
+                wp_set_auth_cookie($loginuserid);
+                wp_set_current_user($loginuserid);
+                $data['success'] = true;
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+
+}
+
+add_action('wp_ajax_get_quimico', 'get_quimico');
+add_action('wp_ajax_nopriv_get_quimico', 'get_quimico');
+
+//add footer modal if user has no name acf
+function add_footer_modal() {
+    if (is_user_logged_in()) {
+        acf_form_head();
+        $user_id = get_current_user_id();
+        $user_info = get_userdata($user_id);
+        $nombre = $user_info->first_name;
+        //check if loged iser is admin
+        if (is_super_admin($user_id)) {
+            return;
+        }
+        if (empty($nombre)) {
+            echo '<div class="modal" tabindex="-1" id="modal-footer" >
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h3 class="mb-4 text-center">Para poder continuar debe completar su información personal</h3>
+                        '.update_user_info_form().'
+                    </div>
+                </div>
+            </div>
+        </div>';
+        echo '<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = new bootstrap.Modal(document.getElementById("modal-footer"), {
+                backdrop: "static"
+            });
+            modal.show();
+        });
+        </script>';
+
+        }
+        else{
+            return;
+        }
+    }
+    else{
+        footer_bar();
+    }
+}
+add_action('wp_footer', 'add_footer_modal');
+
+function update_user_info_form() {
+    if (is_user_logged_in() && !is_admin()) {
+        acf_form_head();
+        $user_id = get_current_user_id();
+        $user_info = get_userdata($user_id);
+        $nombre = $user_info->first_name;
+        $apellido = $user_info->last_name;
+        $rut = get_field('rut', 'user_'. $user_id);
+        $telefono = get_field('telefono', 'user_'. $user_id);
+        $email = $user_info->user_email;
+        $direccion = get_field('direccion', 'user_'. $user_id);
+        if (empty($nombre)) {
+            return '<form action="/cuenta" method="post" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre completo</label>
+                            <input type="text" name="nombre" value="'. $nombre. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu nombre.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="apellido" class="form-label">Apellidos</label>
+                            <input type="text" name="apellido" value="'. $apellido. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu apellido.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="rut" class="form-label">RUT</label>
+                            <input type="text" name="rut" value="'. $rut. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu RUT.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="text" name="telefono" value="'. $telefono. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu número de teléfono.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="text" name="email" value="'. $email. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu correo electrónico.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" name="direccion" value="'. $direccion. '" class="form-control" required>
+                            <div class="invalid-feedback">Por favor, ingresa tu dirección.</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <input type="hidden" name="action" value="update_user_info">
+                        <button type="submit" class="btn btn-primary">Actualizar mi información</button>
+                    </div>
+                </div>
+            </div>
+        </form>';
+        }
+        else{
+            return;
+        }
+    }
+    else{
+        return;
+    }
+}
+
+//register footer bar
+add_action('wp_footer', 'footer_bar');
+function footer_bar() {
+    if (!is_page('Cuenta') && !is_front_page() && !is_user_logged_in()) {
+        echo '<div class="footer-bar">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-md-4">
+                        <img src="'.get_stylesheet_directory_uri().'/logo.png" alt="Logo Footer" class="img-fluid px-5">
+                        <p class="text-center">Regístrate para ver los beneficios y descuentos exclusivos.</p>
+                    </div>
+                    <div class="col-md-8 d-flex justify-content-center">
+                        <div class="row gy-4">
+                            <div class="col-md-4">
+                                <div class="card card-blue">
+                                    <h4>LÍNEA DE SOPORTE</h4>
+                                    <p>Contacta a nuestra línea de soporte
+                                    y obten asistencia personalizada</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-blue">
+                                    <h4>LÍNEA DE SOPORTE</h4>
+                                    <p>Contacta a nuestra línea de soporte
+                                    y obten asistencia personalizada</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-blue">
+                                    <h4>LÍNEA DE SOPORTE</h4>
+                                    <p>Contacta a nuestra línea de soporte
+                                    y obten asistencia personalizada</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-blue">
+                                    <h4>LÍNEA DE SOPORTE</h4>
+                                    <p>Contacta a nuestra línea de soporte
+                                    y obten asistencia personalizada</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-blue">
+                                    <h4>LÍNEA DE SOPORTE</h4>
+                                    <p>Contacta a nuestra línea de soporte
+                                    y obten asistencia personalizada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>';
+        echo '<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var footerBar = document.querySelector(".footer-bar");
+            setTimeout(function () {
+                footerBar.classList.add("show");
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden";
+            }, 1500);
+        });
+        </script>';
+    }
+}
