@@ -239,7 +239,7 @@ function add_html_header() {
         });
       });
     </script>';
-    echo '<script>const ajaxurl = "'. admin_url('admin-ajax.php'). '";</script>';
+    //echo '<script>const ajaxurl = "'. admin_url('admin-ajax.php'). '";</script>';
 }
 //add html to header site
 add_action('wp_head', 'add_html_header');
@@ -682,3 +682,4 @@ function custom_html_shortcode() {
     }
     return $html;
 }
+
