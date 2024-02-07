@@ -461,3 +461,42 @@ body .profile-login .input{
     cursor: pointer;
     text-align: center!important;
 }
+.educacion.container{
+    width: 100%;
+}
+.educacion .educacion-img{
+    max-height: 45vh;
+    overflow: hidden;
+    object-fit: cover;
+}
+.educacion .embed-responsive iframe{
+    width: 100%;
+}
+
+.educacion #modalQuiz .tqb-question-text{
+    font-size: 25px;
+    font-weight: 700;
+    color: #0A0E77 !important;
+}
+.educacion #modalQuiz .tqb-template-style-0 .tqb-answer-inner-wrapper:not(.tqb-open-ended-wrapper){
+    font-size: 18px !important;
+    background-color: #fff;
+    color: #0A0E77;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+.educacion #modalQuiz .no-touch .tqb-template-style-0 .tqb-answer-inner-wrapper:not(.tqb-open-ended-wrapper):hover, .tqb-template-style-0 .tqb-answer-inner-wrapper:not(.tqb-open-ended-wrapper).tqb-active-answer{
+    font-size: 18px !important;
+    background-color: #0A0E77 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+.educacion #modalQuiz .tqb-template-style-0 .tqb-button-holder svg{
+    fill: #0A0E77;
+}
+@media (max-width: 768px){
+    .container{
+        width: 100%;
+    }
+}

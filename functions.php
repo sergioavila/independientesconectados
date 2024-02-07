@@ -679,3 +679,11 @@ function custom_html_shortcode() {
     return $html;
 }
 
+//tiempoo de lectura
+function get_estimated_reading_time( $content = '', $wpm = 250 ) {
+    $content    = strip_shortcodes( $content );
+    $content    = strip_tags( $content );
+    $word_count = str_word_count( $content );
+    $time       = ceil( $word_count / $wpm );
+    return $time ? $time > 1 ? $time . ' minutos' : '1 minuto' : '';
+  }
