@@ -6,7 +6,7 @@
 
 <div id="main">
     <div class="educacion">
-        <img src="<?php echo the_post_thumbnail_url(); ?>" alt="" class="img-fluid w-100 educacion-img mb-lg-5">
+        <img src="<?php echo the_post_thumbnail_url(); ?>" alt="" class="img-fluid w-100 educacion-img mb-lg-5 rounded-4">
         <div id="content-area" class="card border-0 p-3 p-lg-5">
             <?php if ( is_user_logged_in() ) {?>
                <div class="row">
