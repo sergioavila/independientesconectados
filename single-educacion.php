@@ -36,7 +36,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <p>Realiza este pequeño quiz y gana</p>
-                            <p class="mb-4">2.500 puntos conectados</p>
+                            <p class="mb-4"><?php echo get_field('puntos');?> puntos conectados</p>
                             <button type="button" class="btn btn-primary" id="showQuiz">
                                 Comenzar
                             </button>
