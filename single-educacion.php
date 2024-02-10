@@ -29,13 +29,13 @@
                     <img src="<?php echo the_post_thumbnail_url(); ?>" alt="" class="img-fluid w-100 educacion-img mb-lg-5 rounded-4">
                     <div class="card mb-5">
                         <div class="card-body">
-                            <h4 class="mb-2">información del contenido</h4>
+                            <h4 class="mb-2">Información del contenido</h4>
                             <p class="mb-0 pb-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(10,14,119,1)"><path d="M4 22C4 17.5817 7.58172 14 12 14C16.4183 14 20 17.5817 20 22H4ZM13 16.083V20H17.6586C16.9423 17.9735 15.1684 16.4467 13 16.083ZM11 20V16.083C8.83165 16.4467 7.05766 17.9735 6.34141 20H11ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM12 11C14.2104 11 16 9.21043 16 7C16 4.78957 14.2104 3 12 3C9.78957 3 8 4.78957 8 7C8 9.21043 9.78957 11 12 11Z"></path></svg> <strong>Autor:</strong> <?php echo get_field('autor');?></p>
                             <p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(10,14,119,1)"><path d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 10H4V19H20V10ZM15.0355 11.136L16.4497 12.5503L11.5 17.5L7.96447 13.9645L9.37868 12.5503L11.5 14.6716L15.0355 11.136ZM7 5H4V8H20V5H17V6H15V5H9V6H7V5Z"></path></svg> <strong>Publicado:</strong> <?php echo get_field('publicacion');?></p>
                         </div>
                     </div>
                     <div class="text-center">
-                        <p>Realiza este pequeño quiz y podrås ganar </p>
+                        <p>Realiza este pequeño quiz y podrás ganar </p>
                         <div>
                             <p class="mb-4 fs-5 blue"><?php echo get_field('puntos');?> puntos conectados</p>
                             <button type="button" class="btn btn-primary btn-blue" id="showQuiz">

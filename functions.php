@@ -49,45 +49,34 @@ add_shortcode('menu_login','menu_login');
 //add queue scripts to all pages
 function add_scripts() {
     wp_enqueue_script('jquery');
+    //load datatable js and css
+    wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', array('jquery'), '1.11.5', true);
+    wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css', array(), '1.11.5', 'all');
     wp_enqueue_script('child-template', get_stylesheet_directory_uri(). '/main.js', array('jquery'), '1.0.0', true);
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css', array(), '5.3.1', 'all');
     wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js', array(), '5.3.1', true);
 }
 add_action('wp_enqueue_scripts', 'add_scripts');
 
-function obtener_posts_json() {
-    //get all mayorista post type and meta producto
-    $args = array(
-        'post_type' => 'mayorista',
-        'posts_per_page' => -1,
-        'order' => 'ASC',
-        'orderby' => 'title',
-    );
-    $query = new WP_Query($args);
-    $mayoristas = array();
-
-    if ($query->have_posts()) {
-        while ($query->have_posts()) {
-            $query->the_post();
-            $post_id = get_the_ID();
-            $post_title = get_the_title();
-            $post_thumbnail = get_the_post_thumbnail_url();
-            $productos = get_field('producto', get_the_ID());
-            $array_productos = array();
-            foreach($productos as $producto){
-                $array_productos[] = array(
-                    'title' => $producto['descripcion'],
-                    'sku' => $producto['sku']
-                );
-            }
-            $mayoristas[] = array(
-                'title' => $post_title,
-                'thumbnail' => $post_thumbnail,
-                'productos' => $array_productos,
-            );
-        }
-        wp_reset_postdata();
+//get mayorista
+function obtener_mayorista($title) {
+    $mayorista = get_page_by_title($title, OBJECT, 'mayorista');
+    if (!$mayorista) {
+        return false;
     }
+    $id = $mayorista->ID;
+    $title = $mayorista->post_title;
+    $thumbnail = get_the_post_thumbnail_url($id);
+    $permalink = get_the_permalink($id);
+    return array(
+        'id' => $id,
+        'title' => $title,
+        'logo' => $thumbnail,
+        'link' => $permalink
+    );
+}
+
+function obtener_posts_json() {
 
     $args = array(
         'post_type' => 'producto',
@@ -114,16 +103,13 @@ function obtener_posts_json() {
                     break;
                 }
             }
-            foreach($mayoristas as $mayorista){
-                foreach($mayorista['productos'] as $producto){
-                    if($producto['sku'] == get_field('sku_lab', get_the_ID())){
-                        $mayoristas_producto[] = array(
-                            'title' => $mayorista['title'],
-                            'thumbnail' => $mayorista['thumbnail'],
-                        );
-                    }
-                }
-            }
+            $mayoristas_producto[] = get_field('stock_farma1', get_the_ID()) ? obtener_mayorista('CENTRAL ABAST FARMA 7 S A') : false;
+            $mayoristas_producto[] = get_field('stock_farma2', get_the_ID()) ? obtener_mayorista('CLINICAL MARKET S A') : false;
+            $mayoristas_producto[] = get_field('stock_farma3', get_the_ID()) ? obtener_mayorista('DROGUERIA GLOBAL PHARMA SPA') : false;
+            $mayoristas_producto[] = get_field('stock_farma4', get_the_ID()) ? obtener_mayorista('ETHON PHARMACEUTICALS SPA') : false;
+            $mayoristas_producto[] = get_field('stock_farma5', get_the_ID()) ? obtener_mayorista('MEDIVEN SPA') : false;
+            $mayoristas_producto[] = get_field('stock_farma6', get_the_ID()) ? obtener_mayorista('RAMIREZ Y SANCHEZ LTDA') : false;
+            $mayoristas_producto[] = get_field('stock_farma7', get_the_ID()) ? obtener_mayorista('TOLEDO SOCIEDAD ANONIMA') : false;
 
             $posts[] = array(
                 'id' => $post_id,
@@ -164,61 +150,102 @@ add_action('admin_menu', 'add_custom_subpage');
 function add_stock_page() {
     global $wpdb;
     $table_name = $wpdb->prefix. 'posts';
-    // require 'vendor/autoload.php'; // Carga la biblioteca PhpSpreadsheet
-    // use PhpOffice\PhpSpreadsheet\IOFactory;
+    require_once('vendor/php-excel-reader/excel_reader2.php');
+    require_once('vendor/SpreadsheetReader.php');
     ?>
     <div class="wrap">
         <h2>Cargar excel</h2>
         <form method="post" enctype="multipart/form-data">
-            <input type="file" name="excel" />
-            <input type="submit" name="submit" value="Cargar" />
+            <input type="file" name="file" id="file"/>
+            <input type="submit" name="import" value="Cargar" />
         </form>
         <?php
-        //read excel file
-        // if (isset($_POST['submit'])) {
-        //     if (isset($_FILES['excel']) && $_FILES['excel']['error'] == 0) {
-        //         $fileTmpPath = $_FILES['excel']['tmp_name'];
-        //         $fileName = $_FILES['excel']['name'];
-        
-        //         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-        //         $allowedExtensions = ['xls', 'xlsx'];
-        
-        //         if (in_array($fileExtension, $allowedExtensions)) {
-        //             $upload_dir = wp_upload_dir(); // Obtiene el directorio de carga de WordPress
-        //             $uploadPath = $upload_dir['path'] . '/' . 'uploaded_excel.' . $fileExtension;
-        
-        //             if (move_uploaded_file($fileTmpPath, $uploadPath)) {
-        //                 $spreadsheet = IOFactory::load($uploadPath);
-        
-        //                 // Obtén la primera hoja del libro de trabajo
-        //                 $sheet = $spreadsheet->getActiveSheet();
-        
-        //                 // Obtén todos los datos de la hoja
-        //                 $data = $sheet->toArray();
-        
-        //                 // Crea una tabla HTML
-        //                 echo '<table border="1">';
-        //                 foreach ($data as $row) {
-        //                     echo '<tr>';
-        //                     foreach ($row as $cell) {
-        //                         echo '<td>' . $cell . '</td>';
-        //                     }
-        //                     echo '</tr>';
-        //                 }
-        //                 echo '</table>';
-        
-        //                 echo "Archivo cargado y leído correctamente.";
-        //             } else {
-        //                 echo "Error al mover el archivo a la ubicación deseada.";
-        //             }
-        //         } else {
-        //             echo "Extensión de archivo no permitida. Solo se permiten archivos Excel.";
-        //         }
-        //     } else {
-        //         echo "Error al cargar el archivo.";
-        //     }
-        // }
+        if (isset($_POST["import"])){
+            $allowedFileType = ['application/vnd.ms-excel','text/xls','text/xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+              if(in_array($_FILES["file"]["type"],$allowedFileType)){
+                    $targetPath = wp_upload_dir()['path'] . '/' . $_FILES['file']['name'];
+                    move_uploaded_file($_FILES['file']['tmp_name'], $targetPath);
+                    $Reader = new SpreadsheetReader($targetPath);
+                    $sheetCount = count($Reader->sheets());
+                    if($sheetCount > 1){
+                        $type = "error";
+                        $message = "El archivo contiene más de una hoja. Por favor vuelva a intentarlo";
+                    }
+                    //expected number of columns
+                    $expectedColumns = 4;
+                    $fileColumns = count($Reader->current());
+                    if($fileColumns != $expectedColumns){
+                        $type = "error";
+                        $message = "El archivo contiene un número de columnas incorrecto. Por favor vuelva a intentarlo";
+                    }
+                    $data  = array();
+                    for($i=0;$i<$sheetCount;$i++){
+                        $Reader->ChangeSheet($i);
+                        $firstRow = true;
+                        $headers = array();
+                        foreach ( $Reader as $Row ) {
+                            //skip first
+                            if($firstRow){
+                                $firstRow = false;
+                                $headers = $Row;
+                                continue;
+                            }
+                            $data[] = array(
+                                'sku' => $Row[0],
+                                'name' => $Row[1],
+                                'farma1' => $Row[2] == "SI" ?  true : false,
+                                'farma2' => $Row[3] == "SI" ?  true : false,
+                                'farma3' => $Row[4] == "SI" ?  true : false,
+                                'farma4' => $Row[5] == "SI" ?  true : false,
+                                'farma5' => $Row[6] == "SI" ?  true : false,
+                                'farma6' => $Row[7] == "SI" ?  true : false,
+                                'farma7' => $Row[8] == "SI" ?  true : false,
+                            );
+                        };
+                     }
+                     echo "Se han encontrado ". count($data). " productos<br>";
+                     echo "Actualizando...<br>";
+                     update_stock($data);
+
+              } else {
+                    $type = "error";
+                    $message = "El archivo enviado es invalido. Por favor vuelva a intentarlo";
+              }
+            }
 }
+
+//update stock in mayorista posttype meta acf 
+function update_stock($data) {
+    foreach ($data as $farma){
+        foreach ($farma as $key => $value){
+            if($key == 'sku'){
+                $value = str_replace(' ', '', $value);
+                $args = array(
+                    'post_type' => 'producto',
+                    'posts_per_page' => 1,
+                    'meta_key' => 'sku_lab',
+                    'meta_value' => $value,
+                    'meta_compare' => '='
+                );
+                $query = new WP_Query($args);
+                if ($query->have_posts()) {
+                    $query->the_post();
+                    $post_id = get_the_ID();
+                    echo get_the_title($post_id). " actualizado<br>";
+                    update_field('stock_farma1', $farma['farma1'], $post_id);
+                    update_field('stock_farma2', $farma['farma2'], $post_id);
+                    update_field('stock_farma3', $farma['farma3'], $post_id);
+                    update_field('stock_farma4', $farma['farma4'], $post_id);
+                    update_field('stock_farma5', $farma['farma5'], $post_id);
+                    update_field('stock_farma6', $farma['farma6'], $post_id);
+                    update_field('stock_farma7', $farma['farma7'], $post_id);
+                }
+            }
+        }
+    }
+
+}
+
 
 //add html to header
 function add_html_header() {
@@ -279,7 +306,7 @@ function custom_breadcrumbs() {
             echo $before . '<a href="/foro">Foro</a>' . $after;
         }
         if ($post->post_type == 'educacion') {
-            echo $before . '<a href="/educacion">Educaciøn</a>' . $after;
+            echo $before . '<a href="/educacion">Educación</a>' . $after;
         }
         echo $before . get_the_title() . $after;
         
@@ -677,7 +704,8 @@ function custom_html_shortcode() {
             var last_navlink = $("li:last-child .nav-link");
             last_navlink.addClass("active");
         });
-        </script>';
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>';
     }
     return $html;
 }

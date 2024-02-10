@@ -25,9 +25,6 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                     </tr>
                 </thead>
             </table>
-
-            <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-            <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
             <script>
             jQuery(document).ready(function($) {
                 $.ajax({
@@ -40,18 +37,26 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                         if (response && response.length > 0) {
                             $('#postsTable').removeClass('d-none');
                             $('.preload').addClass('d-none');
+                            console.log('Respuesta:', response);
                             $('#postsTable').DataTable({
                                 data: response,
                                 columns: [
                                     { data: 'title' },
                                     {
                                         data: 'mayoristas',
+                                        //render mayoristas as a list 
                                         render: function(data, type, row) {
-                                            var thumbnailsHtml = data.map(function(mayorista) {
-                                                return '<img src="' + mayorista.thumbnail + '" alt="' + mayorista.title + '" class="icon-mayorista float-end" />';
-                                            }).join(' ');
-
-                                            return thumbnailsHtml;
+                                            var html = '';
+                                            if (data && data.length > 0) {
+                                                data.forEach(function(mayorista) {
+                                                    //if not false
+                                                    if(mayorista == false){
+                                                        return
+                                                    }
+                                                    html += '<a href="' + mayorista.link + '" title="' + mayorista.title + '" target="_blank"><img src="'+mayorista.logo+'" class="icon-mayorista"/></a> ';
+                                                });
+                                            }
+                                            return html;
                                         }
                                     }
                                 ],

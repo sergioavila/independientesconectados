@@ -25,9 +25,6 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
             <div id="sin-resultados" class="my-5 d-none">
                 <h3 class="text-center pb-5">No se encontraron productos</h3>
             </div>
-
-            <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-            <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
             <script>
