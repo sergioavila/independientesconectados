@@ -278,6 +278,9 @@ function custom_breadcrumbs() {
         if ($post->post_type == 'question') {
             echo $before . '<a href="/foro">Foro</a>' . $after;
         }
+        if ($post->post_type == 'educacion') {
+            echo $before . '<a href="/educacion">Educaciøn</a>' . $after;
+        }
         echo $before . get_the_title() . $after;
         
     } elseif (is_page() && !$post->post_parent) {

@@ -495,6 +495,33 @@ body .profile-login .input{
 .educacion #modalQuiz .tqb-template-style-0 .tqb-button-holder svg{
     fill: #0A0E77;
 }
+.educacion h1, .educacion h2, .educacion h3, .educacion h4{
+    color: #0A0E77;
+    font-weight: 700;
+}
+.educacion-datos p{
+    margin-right: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #0A0E77;
+}
+p.disclaimer{
+    font-size: 12px;
+    line-height: 1.3;
+    color: #0A0E77;
+    font-weight: 700;
+    margin-top: 30px;
+}
+.blue{
+    color: #0A0E77;
+    font-weight: 700;
+}
+.educacion .btn-blue{
+    background-color: #0A0E77;
+    border-radius: 15px;
+    padding: 10px 20px;
+}
 @media (max-width: 768px){
     .container{
         width: 100%;
