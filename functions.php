@@ -417,34 +417,34 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
 register_nav_menu('main-menu', 'Main menu');
 //add custom header site logo, menu and search function
 function custom_header_setup() { ?>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 g-0">
-            <div class="navbar navbar-default">
-                <div class="navbar-header">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" class="navbar-brand">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo.png" width="230" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>">
-                    </a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 g-0">
+                <div class="navbar navbar-default">
+                    <div class="navbar-header">
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="navbar-brand">
+                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo.png" width="230" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>">
+                        </a>
+                    </div>
+                    <div class="menu-principal">
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'main-menu',
+                            'container' => false,
+                            'menu_class' => '',
+                            'fallback_cb' => '__return_false',
+                            'items_wrap' => '<ul id="%1$s" class="navbar-nav d-flex flex-row justify-content-between mb-md-0 %2$s">%3$s</ul>',
+                            'depth' => 2,
+                            'walker' => new bootstrap_5_wp_nav_menu_walker()
+                        ));?>
+                    </div>
+                    <?php echo do_shortcode('[menu_login]');?>
                 </div>
-                <div class="menu-principal">
-                    <?php
-                    wp_nav_menu(array(
-                        'theme_location' => 'main-menu',
-                        'container' => false,
-                        'menu_class' => '',
-                        'fallback_cb' => '__return_false',
-                        'items_wrap' => '<ul id="%1$s" class="navbar-nav d-flex flex-row justify-content-between mb-md-0 %2$s">%3$s</ul>',
-                        'depth' => 2,
-                        'walker' => new bootstrap_5_wp_nav_menu_walker()
-                    ));?>
-                </div>
-                <?php echo do_shortcode('[menu_login]');?>
             </div>
-        </div>
-        <div class="col-12">
-            <?php echo custom_breadcrumbs();?>
-        </div>
-</div>
+            <div class="col-12">
+                <?php echo custom_breadcrumbs();?>
+            </div>
+    </div>
 <?php }
 add_action('bootstrap_header', 'custom_header_setup');
 // add shortcode custom_header_setup
@@ -452,55 +452,53 @@ add_shortcode('custom_header_setup', 'custom_header_setup');
 
 //get post type quimico if rut acf exist
 function get_quimico(){
-    $data = array();
-    if (empty($_POST['rut'])) {
+    global $wpdb;
+    $rut = $_POST['rut'];
+    if (empty($rut)) {
         echo 'Error: No se envió el rut';
         return;
     }
-
-    $rut = sanitize_text_field($_POST['rut']);
-    $post_type = 'quimico';
-
-    $args = array(
-        'post_type' => $post_type,
-        'posts_per_page' => 1,
-        'meta_key' => 'rut',
-        'meta_value' => $rut,
-        'meta_compare' => '='
-    );
-
-    $query = new WP_Query($args);
-    if ($query->have_posts()) {
-        $query->the_post();
-        $post_id = get_the_ID();
-        $loginuserid = get_field('user_id', $post_id);
-        if ( !$loginuserid) {
-            echo 'No se encontró el usuario';
-            return;
-        }
-        else{
-            //$rut menos dos digitos
-            $rut_2 = substr($rut, 0, -2);
-            $credentials = array(
-                'user_login' => $rut,
-                'user_password' => $rut_2,
-                'remember' => true
+    $sql = "SELECT * FROM wp_qfs_teva WHERE rut = '$rut'";
+    $results = $wpdb->get_row($sql);
+    if (empty($results)) {
+        echo 'Error: No se encontró el químico';
+        return;
+    }
+    else {
+        $user = get_user_by('login', $results->rut);
+        if (!$user) {
+            //add new user to wp
+            $userdata = array(
+                'user_login' => $results->rut,
+                'user_pass' => $results->rut,
+                'user_email' => $results->rut. '@independientesconectados.cl',
+                'first_name' => $results->nombre,
+                'last_name' => $results->apellido1. ' '. $results->apellido2,
+                //'role' => 'quimico'
             );
-            $user = wp_signon($credentials, false);
-            if (is_wp_error($user)) {
-                $data['success'] = false;
-                $data['message'] = 'Ha ocurrido un error al iniciar sesión';
-            }
-            else{
-                wp_set_current_user($loginuserid);
-                wp_set_auth_cookie($loginuserid);
-                wp_set_current_user($loginuserid);
+            $user_id = wp_insert_user($userdata);
+            if (is_wp_error($user_id)) {
+                echo 'Error: Ha ocurrido un error al iniciar sesión';
+                return;
+            }else{
+                //login user
+                wp_set_current_user($user_id);
+                wp_set_auth_cookie($user_id);
                 $data['success'] = true;
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                exit;
             }
+        }else{
+            //login user
+            $user_id = $user->ID;
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
+            $data['success'] = true;
+            header('Content-Type: application/json');
+            echo json_encode($data);
+            exit;
         }
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit;
     }
 
 }
