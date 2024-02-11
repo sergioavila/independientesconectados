@@ -49,12 +49,24 @@ add_shortcode('menu_login','menu_login');
 //add queue scripts to all pages
 function add_scripts() {
     wp_enqueue_script('jquery');
-    //load datatable js and css
-    wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', array('jquery'), '1.11.5', true);
-    wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css', array(), '1.11.5', 'all');
-    wp_enqueue_script('child-template', get_stylesheet_directory_uri(). '/main.js', array('jquery'), '1.0.0', true);
+
+    // Luego, carga Bootstrap
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css', array(), '5.3.1', 'all');
-    wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js', array(), '5.3.1', true);
+    wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.1', true);
+
+    // Luego, carga DataTables
+    wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css', array(), '1.11.5', 'all');
+    wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', array('jquery', 'bootstrap'), '1.11.5', true);
+
+    // Luego, carga jQuery Validate
+    wp_enqueue_script( 'validate', '//cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js', array('jquery'));
+    wp_enqueue_script( 'extravalidate', '//cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js', array('jquery','validate'));
+
+    // Luego, carga Inputmask
+    wp_enqueue_script('inputmask', '//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js', array('jquery'), '5.0.8', true);
+
+    // Finalmente, carga tu script personalizado
+    wp_enqueue_script('child-template', get_stylesheet_directory_uri(). '/main.js', array('jquery', 'validate', 'inputmask', 'datatables'), '1.1.0', true);
 }
 add_action('wp_enqueue_scripts', 'add_scripts');
 
@@ -265,7 +277,7 @@ function add_html_header() {
     //echo '<script>const ajaxurl = "'. admin_url('admin-ajax.php'). '";</script>';
 }
 //add html to header site
-add_action('wp_head', 'add_html_header');
+//add_action('wp_head', 'add_html_header');
 
 function custom_breadcrumbs() {
     $delimiter = ' ';
@@ -513,18 +525,76 @@ function add_footer_modal() {
         $user_id = get_current_user_id();
         $user_info = get_userdata($user_id);
         $nombre = $user_info->first_name;
+        $farmacia = get_field('farmacia', 'user_'. $user_id);
         //check if loged iser is admin
-        if (is_super_admin($user_id)) {
-            return;
-        }
-        if (empty($nombre)) {
+        // if (is_super_admin($user_id)) {
+        //     return;
+        // }
+        if (empty($farmacia)) {
             echo '<div class="modal" tabindex="-1" id="modal-footer" >
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3 class="mb-4 text-center">Para poder continuar debe completar su información personal</h3>
-                        '.update_user_info_form().'
-                    </div>
+                        <h3 class="text-center titleblue mt-4">Debes completar tu perfīl</h3>
+                        <p class="text-center mb-5 mb-md-3"> Para continuar tu registro en Independientes Conectados debes completa la siguiente información </p>';?>
+                        <form class="px-md-5" id="updateForm" method="get" action="">
+                            <fieldset>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Nombre completo</label>
+                                        <input type="text" name="name" class="form-control" id="name" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="lastname" class="form-label">Apellidos</label>
+                                        <input type="text" name="lastname" class="form-control" id="lastname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="rut" class="form-label">RUT</label>
+                                        <input type="text" class="form-control" name="rut" id="rut" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="fecha" class="form-label">Fecha de nacimiento</label>
+                                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="correo" class="form-label">Correo electrónico</label>
+                                        <input type="email" class="form-control" id="correo" name="correo" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="h-100 justify-content-center d-flex align-items-center">
+                                        <a href="#" class="link">Recibir notificaciones</a>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="rutfarmacia" class="form-label">RUT Farmacia</label>
+                                        <input type="text" class="form-control" id="rutfarmacia" name="rutfarmacia" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label">Dirección Farmacia</label>
+                                        <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Actualizar datos">
+                            </div>
+                            </fieldset>
+                        </form>
+        <?php echo   '</div>
                 </div>
             </div>
         </div>';
@@ -548,9 +618,8 @@ function add_footer_modal() {
 }
 add_action('wp_footer', 'add_footer_modal');
 
-function update_user_info_form() {
+function complete_user_info_form() {
     if (is_user_logged_in() && !is_admin()) {
-        acf_form_head();
         $user_id = get_current_user_id();
         $user_info = get_userdata($user_id);
         $nombre = $user_info->first_name;
@@ -558,59 +627,143 @@ function update_user_info_form() {
         $rut = get_field('rut', 'user_'. $user_id);
         $telefono = get_field('telefono', 'user_'. $user_id);
         $email = $user_info->user_email;
+        $fecha = get_field('fecha', 'user_'. $user_id);
+        $rutfarmacia = get_field('rutfarmacia', 'user_'. $user_id);
+        $notificaciones = get_field('notificaciones', 'user_'. $user_id);
         $direccion = get_field('direccion', 'user_'. $user_id);
         if (empty($nombre)) {
-            return '<form action="/cuenta" method="post" class="needs-validation" novalidate>
+            return '<form action="javascript:void(0);" method="post" id="updateinfo">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre completo</label>
-                            <input type="text" name="nombre" value="'. $nombre. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu nombre.</div>
+                            <input type="text" name="nombre" value="'. $nombre. '" class="form-control" id="nombre">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label for="apellido" class="form-label">Apellidos</label>
-                            <input type="text" name="apellido" value="'. $apellido. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu apellido.</div>
+                            <input type="text" name="apellido" value="'. $apellido. '" class="form-control" id="apellido">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="rut" class="form-label">RUT</label>
-                            <input type="text" name="rut" value="'. $rut. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu RUT.</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="text" name="telefono" value="'. $telefono. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu número de teléfono.</div>
+                            <label for="fecha" class="form-label">Fecha de nacimimento</label>
+                            <input type="text" name="fecha" value="'. $fecha. '" class="form-control" id="fecha">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="text" name="email" value="'. $email. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu correo electrónico.</div>
+                            <input type="text" name="email" value="'. $email. '" class="form-control" id="email">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" name="direccion" value="'. $direccion. '" class="form-control" required>
-                            <div class="invalid-feedback">Por favor, ingresa tu dirección.</div>
+                            <label for="rut" class="form-label">RUT</label>
+                            <input type="text" name="rut" value="'. $rut. '" class="form-control" id="rut">
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="rutfarmacia" class="form-label">RUT Farmacia</label>
+                            <input type="text" name="rutfarmacia" value="'. $rutfarmacia. '" class="form-control" id="rutfarmacia">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección Farmacia</label>
+                            <input type="text" name="direccion" value="'. $direccion. '" class="form-control" id="direccion">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3 text-end">
+                            <a href="#" class="btn border mt-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(10,14,119,1)"><path d="M20 17H22V19H2V17H4V10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10V17ZM18 17V10C18 6.68629 15.3137 4 12 4C8.68629 4 6 6.68629 6 10V17H18ZM9 21H15V23H9V21Z"></path></svg> Habilitar notificaciones</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 text-center">
                         <input type="hidden" name="action" value="update_user_info">
-                        <button type="submit" class="btn btn-primary">Actualizar mi información</button>
+                        <a href="#" class="btn btn-primary btn-blue mt-4" id="sendupdate">Actualizar información</a>
                     </div>
                 </div>
             </div>
-        </form>';
+        </form>
+        <script>
+        jQuery.validator.addMethod(
+          "validateRut",
+          function (value, element) {
+            return this.optional(element) || validarRut(value);
+          },
+          "Debes ingresar un RUT válido"
+        );
+        function validarRut(rut) {
+          rut = rut.replace(/[^k0-9]/gi, "");
+          var dv = rut.slice(-1);
+          var numero = rut.slice(0, -1);
+          var i = 2;
+          var suma = 0;
+          numero
+            .split("")
+            .reverse()
+            .forEach(function (v) {
+              if (i == 8) i = 2;
+              suma += parseInt(v) * i;
+              i++;
+            });
+          var dvr = 11 - (suma % 11);
+      
+          if (dvr == 11) {
+            dvr = 0;
+          }
+          if (dvr == 10) {
+            dvr = "K";
+          }
+      
+          if (dvr.toString().toUpperCase() === dv.toUpperCase()) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        jQuery("#updateinfo").validate({
+          rules: {
+            rut: { validateRut: true },
+            nombre: { required: true },
+            apellido1: { required: true },
+            apellido2: { required: true },
+          },
+          messages: {
+            rut: "El campo es inválido.",
+            nombre: "Ingresa tus nombres.",
+            apellido1: "Ingresa tu primer apellido.",
+            apellido2: "Ingresa tu segundo apellido.",
+            fono: "Ingresa un número de teléfono válido.",
+            email: "Ingresa un correo electrónico válido.",
+          },
+        });
+        jQuery("#rut").inputmask({
+          mask: "9(999){2}-K",
+          autoUnmask: true,
+          keepStatic: true,
+          showMaskOnFocus: false,
+          showMaskOnHover: false,
+          maskChar: "",
+          definitions: {
+            K: {
+              validator: "[0-9|kK]",
+              casing: "upper",
+            },
+          },
+        });
+        
+      
+        jQuery("#sendupdate").on("click", function () {
+          console.log("click");
+          if (jQuery("#updateinfo").valid()) {
+            jQuery("#updateinfo").submit();
+          }
+        });
+        </script>';
         }
         else{
             return;
@@ -716,3 +869,20 @@ function get_estimated_reading_time( $content = '', $wpm = 250 ) {
     $time       = ceil( $word_count / $wpm );
     return $time ? $time > 1 ? $time . ' minutos' : '1 minuto' : '';
   }
+
+  //edirect to home if user is not admin
+    add_action('admin_init', 'redirect_non_admin_users');
+    function redirect_non_admin_users() {
+        if (!current_user_can('manage_options') && $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php') {
+            wp_redirect(site_url().'/cuenta');
+            exit;
+        }
+    }
+
+
+    add_action('after_setup_theme', 'remove_admin_bar');
+function remove_admin_bar() {
+  if (!current_user_can('administrator') && !is_admin()) {
+    show_admin_bar(false);
+  }
+}

@@ -517,10 +517,29 @@ p.disclaimer{
     color: #0A0E77;
     font-weight: 700;
 }
+.titleblue{
+    color: #0A0E77;
+    font-size: 22px;
+    font-weight: 700;
+}
 .educacion .btn-blue{
     background-color: #0A0E77;
     border-radius: 15px;
     padding: 10px 20px;
+}
+.btn-blue{
+    background-color: #0A0E77;
+    border-radius: 15px;
+    padding: 10px 20px;
+}
+a.link{
+    color: #0A0E77;
+    font-weight: 700;
+}
+label.error{
+    color: #0A0E77;
+    font-weight: 700;
+    font-size: 12px;
 }
 @media (max-width: 768px){
     .container{
