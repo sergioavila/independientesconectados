@@ -180,8 +180,7 @@ acf_form_head();
                 <div class="pb-5 text-center profile-login">
                     <form id="login-form">
                         <input type="text" id="user_login" name="user_login" class="form-control input" placeholder="RUT" required>
-                        <div id="login-error"></div>
-                        <button id="submit">Enviar</button>
+                        <button id="submit" class="mt-3">Enviar</button>
                     </form>
                 </div>
            <?php  } ?>

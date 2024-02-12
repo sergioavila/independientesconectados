@@ -17,7 +17,7 @@ jQuery(document).ready(function () {
     submitHandler: function (form) {
       jQuery("#login-form #submit").prop("value", "Buscando...");
       jQuery("#login-form #submit").prop("disabled", true);
-      jQuery("#login-error").html("");
+      jQuery("#user_login-error").html("");
       jQuery.ajax({
         url: ajaxurl,
         type: "POST",
@@ -31,13 +31,13 @@ jQuery(document).ready(function () {
           } else {
             jQuery("#login-form #submit").prop("value", "Buscar");
             jQuery("#login-form #submit").prop("disabled", false);
-            jQuery("#login-error").html(response).show();
+            jQuery("#user_login-error").html(response).show();
           }
         },
         error: function () {
           jQuery("#login-form #submit").prop("value", "Buscar");
           jQuery("#login-form #submit").prop("disabled", false);
-          jQuery("#login-error")
+          jQuery("#user_login-error")
             .show()
             .html("Ha ocurrido un error, intenta nuevamente");
         },

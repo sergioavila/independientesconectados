@@ -32,7 +32,7 @@ function menu_login() {
         $avatar = get_avatar($user_id) ? get_avatar($user_id) : 'https://placehold.co/300x300.png';
         $logout_link = wp_logout_url(home_url('/'));
         $mostrar_formulario = ' <div class="logedinuser">
-        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" user_id="'.$user_id.'" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
+        <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tus puntos" class="d-none d-md-flex"><p><span class="text">Tus puntos:</span><span class="puntos">'.do_shortcode('[gamipress_points type="puntos" user_id="'.$user_id.'" inline ="yes" label="no" thumbnail="no" align="none"align="none"]').'</span></p></a>
             <a href="/cuenta" data-bs-toggle="tooltip" data-bs-title="Revisa tu cuenta">
                 '.$avatar.'
             </a>
@@ -438,7 +438,7 @@ function custom_header_setup() { ?>
                             <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo.png" width="230" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>">
                         </a>
                     </div>
-                    <div class="menu-principal">
+                    <div class="menu-principal d-none d-md-block">
                         <?php
                         wp_nav_menu(array(
                             'theme_location' => 'main-menu',
