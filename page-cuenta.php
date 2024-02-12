@@ -65,67 +65,111 @@ acf_form_head();
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                <form class="px-md-3" id="updateForm" method="get" action="">
-                            <fieldset>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Nombre completo</label>
-                                        <input type="text" name="name" class="form-control" id="name" value="<?php echo $nombre; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="lastname" class="form-label">Apellidos</label>
-                                        <input type="text" name="lastname" class="form-control" id="lastname" value="<?php echo $apellido; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="rut" class="form-label">RUT</label>
-                                        <input type="text" class="form-control" name="rut" id="rut" value="<?php echo $rut; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="fecha" class="form-label">Fecha de nacimiento</label>
-                                        <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo $fecha; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="correo" class="form-label">Correo electrónico</label>
-                                        <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="h-100 justify-content-center d-flex align-items-center">
-                                        <a href="#" class="link">Recibir notificaciones</a>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="rutfarmacia" class="form-label">RUT Farmacia</label>
-                                        <input type="text" class="form-control" id="rutfarmacia" name="rutfarmacia" value="<?php echo $rutfarmacia; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="direccion" class="form-label">Dirección Farmacia</label>
-                                        <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $direccion; ?>" required>
-                                    </div>
+                                    <form class="px-md-3" id="update" method="get" action="">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="name" class="form-label">Nombre completo</label>
+                                                        <input type="text" name="name" class="form-control" id="name" value="<?php echo $nombre; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="lastname" class="form-label">Apellidos</label>
+                                                        <input type="text" name="lastname" class="form-control" id="lastname" value="<?php echo $apellido; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="rut" class="form-label">RUT</label>
+                                                        <input type="text" class="form-control" name="rut" id="rut" value="<?php echo $rut; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="fecha" class="form-label">Fecha de nacimiento</label>
+                                                        <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo $fecha; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="correo" class="form-label">Correo electrónico</label>
+                                                        <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="h-100 justify-content-center d-flex align-items-center">
+                                                        <a href="#" class="link">Recibir notificaciones</a>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="rutfarmacia" class="form-label">RUT Farmacia</label>
+                                                        <input type="text" class="form-control" id="rutfarmacia" name="rutfarmacia" value="<?php echo $rutfarmacia; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="direccion" class="form-label">Dirección Farmacia</label>
+                                                        <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $direccion; ?>" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-center">
+                                                <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Actualizar datos">
+                                            </div>
+                                        </fieldset>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="col-12 text-center">
-                                <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Actualizar datos">
-                            </div>
-                            </fieldset>
-                        </form>
-                        </div>
                         </div>
                     </div>
-                </div>
+                    <script>
+                          jQuery("#update").validate({
+                            rules: {
+                            rut: { validateRut: true },
+                            name: { validaDosPalabras: true },
+                            lastname: { validaDosPalabras: true },
+                            correo: { required: true },
+                            fecha: { required: true },
+                            direccion: { required: true },
+                            rutfarmacia: { validateRut: true },
+                            },
+                            messages: {
+                            rut: "Ingresa un RUT válido.",
+                            name: "Ingresa tu nombre completo.",
+                            lastname: "Ingresa tus apellidos.",
+                            fecha: "Ingresa una fecha válida.",
+                            correo: "Ingresa un correo electrónico válido.",
+                            direccion: "Ingresa la dirección de tu farmacia",
+                            rutfarmacia: "Ingresa el RUT de tu farmacia.",
+                            },
+                            submitHandler: function (form) {
+                            let formData = new FormData(form);
+                            formData.append("action", "update_quimico");
+                            jQuery.ajax({
+                                url: ajaxurl,
+                                type: "POST",
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                if (response.success) {
+                                    window.location.href = "/cuenta";
+                                } else {
+                                    window.location.href = "/cuenta";
+                                }
+                                },
+                                error: function (response) {
+                                console.log("error", response);
+                                jQuery("#update-error").show();
+                                },
+                            });
+                            },
+                        });
+                    </script>
                 <?php
                 //if post forrm is submitted
                 if (isset($_POST['submit'])) {
@@ -135,11 +179,10 @@ acf_form_head();
             <?php } else {?>
                 <div class="pb-5 text-center profile-login">
                     <form id="login-form">
-                        <input type="text" id="user_login" class="form-control input" placeholder="RUT">
+                        <input type="text" id="user_login" name="user_login" class="form-control input" placeholder="RUT" required>
                         <div id="login-error"></div>
                         <button id="submit">Enviar</button>
                     </form>
-                    
                 </div>
            <?php  } ?>
         </div>

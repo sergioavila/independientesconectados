@@ -537,7 +537,18 @@ function add_footer_modal() {
         $fecha = get_field('fecha', 'user_'. $user_id);
         $rutfarmacia = get_field('rutfarmacia', 'user_'. $user_id);
         if (!$direccion) {
-            echo '<div class="modal" tabindex="-1" id="modal-footer" >
+            $page_id = get_queried_object_id();
+            $page = get_post($page_id);
+            $page_slug = $page->post_name;
+            if ($page_slug != 'cuenta') {
+                echo '<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    window.location.href = "/cuenta";
+                });
+                </script>';
+                exit;
+            }
+            echo '<div class="modal" tabindex="-1" id="modal-footer" data-bs-keyboard="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -600,6 +611,50 @@ function add_footer_modal() {
                             </div>
                             </fieldset>
                         </form>
+                        <script>
+                              jQuery("#updateForm").validate({
+                                rules: {
+                                rut: { validateRut: true },
+                                name: { validaDosPalabras: true },
+                                lastname: { validaDosPalabras: true },
+                                correo: { required: true },
+                                fecha: { required: true },
+                                direccion: { required: true },
+                                rutfarmacia: { validateRut: true },
+                                },
+                                messages: {
+                                rut: "Ingresa un RUT válido.",
+                                name: "Ingresa tu nombre completo.",
+                                lastname: "Ingresa tus apellidos.",
+                                fecha: "Ingresa una fecha válida.",
+                                correo: "Ingresa un correo electrónico válido.",
+                                direccion: "Ingresa la dirección de tu farmacia",
+                                rutfarmacia: "Ingresa el RUT de tu farmacia.",
+                                },
+                                submitHandler: function (form) {
+                                let formData = new FormData(form);
+                                formData.append("action", "update_quimico");
+                                jQuery.ajax({
+                                    url: ajaxurl,
+                                    type: "POST",
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+                                    if (response.success) {
+                                        window.location.href = "/cuenta";
+                                    } else {
+                                        window.location.href = "/cuenta";
+                                    }
+                                    },
+                                    error: function (response) {
+                                    console.log("error", response);
+                                    jQuery("#update-error").show();
+                                    },
+                                });
+                                },
+                            });
+                        </script>
         <?php echo          '</div>
                         </div>
                     </div>

@@ -6,35 +6,44 @@ jQuery(document).ready(function () {
   const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
   );
-  jQuery(document).on("click", "#login-form #submit", function () {
-    jQuery("#login-form #submit").prop("value", "Buscando...");
-    jQuery("#login-form #submit").prop("disabled", true);
-    jQuery("#login-error").html("");
-    jQuery.ajax({
-      url: ajaxurl,
-      type: "POST",
-      data: {
-        action: "get_quimico",
-        rut: jQuery("#login-form #user_login").val(),
-      },
-      success: function (response) {
-        if (response.success) {
-          window.location.reload();
-        } else {
+
+  jQuery("#login-form").validate({
+    rules: {
+      user_login: { validateRut: true },
+    },
+    messages: {
+      user_login: "Ingresa un RUT válido.",
+    },
+    submitHandler: function (form) {
+      jQuery("#login-form #submit").prop("value", "Buscando...");
+      jQuery("#login-form #submit").prop("disabled", true);
+      jQuery("#login-error").html("");
+      jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        data: {
+          action: "get_quimico",
+          rut: jQuery("#login-form #user_login").val(),
+        },
+        success: function (response) {
+          if (response.success) {
+            window.location.reload();
+          } else {
+            jQuery("#login-form #submit").prop("value", "Buscar");
+            jQuery("#login-form #submit").prop("disabled", false);
+            jQuery("#login-error").html(response).show();
+          }
+        },
+        error: function () {
           jQuery("#login-form #submit").prop("value", "Buscar");
           jQuery("#login-form #submit").prop("disabled", false);
-          jQuery("#login-error").html(response).show();
-        }
-      },
-      error: function () {
-        jQuery("#login-form #submit").prop("value", "Buscar");
-        jQuery("#login-form #submit").prop("disabled", false);
-        jQuery("#login-error")
-          .show()
-          .html("Ha ocurrido un error, intenta nuevamente");
-      },
-    });
-    return false;
+          jQuery("#login-error")
+            .show()
+            .html("Ha ocurrido un error, intenta nuevamente");
+        },
+      });
+      return false;
+    },
   });
   //form
   function validaDosPalabras(palabra) {
@@ -86,46 +95,4 @@ jQuery(document).ready(function () {
     },
     "Debes ingresar dos palabras"
   );
-  jQuery("#updateForm").validate({
-    rules: {
-      rut: { validateRut: true },
-      name: { validaDosPalabras: true },
-      lastname: { validaDosPalabras: true },
-      correo: { required: true },
-      fecha: { required: true },
-      direccion: { required: true },
-      rutfarmacia: { validateRut: true },
-    },
-    messages: {
-      rut: "Ingresa un RUT válido.",
-      name: "Ingresa tu nombre completo.",
-      lastname: "Ingresa tus apellidos.",
-      fecha: "Ingresa una fecha válida.",
-      correo: "Ingresa un correo electrónico válido.",
-      direccion: "Ingresa la dirección de tu farmacia",
-      rutfarmacia: "Ingresa el RUT de tu farmacia.",
-    },
-    submitHandler: function (form) {
-      let formData = new FormData(form);
-      formData.append("action", "update_quimico");
-      jQuery.ajax({
-        url: ajaxurl,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-          if (response.success) {
-            window.location.href = "/cuenta";
-          } else {
-            window.location.href = "/cuenta";
-          }
-        },
-        error: function (response) {
-          console.log("error", response);
-          jQuery("#update-error").show();
-        },
-      });
-    },
-  });
 });
