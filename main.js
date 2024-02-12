@@ -23,14 +23,15 @@ jQuery(document).ready(function () {
         } else {
           jQuery("#login-form #submit").prop("value", "Buscar");
           jQuery("#login-form #submit").prop("disabled", false);
-          jQuery("#login-error").html(response.message).show();
+          jQuery("#login-error").html(response).show();
         }
       },
-      error: function (response) {
-        console.log("error", response);
+      error: function () {
         jQuery("#login-form #submit").prop("value", "Buscar");
         jQuery("#login-form #submit").prop("disabled", false);
-        jQuery("#login-error").show();
+        jQuery("#login-error")
+          .show()
+          .html("Ha ocurrido un error, intenta nuevamente");
       },
     });
     return false;
@@ -105,7 +106,26 @@ jQuery(document).ready(function () {
       rutfarmacia: "Ingresa el RUT de tu farmacia.",
     },
     submitHandler: function (form) {
-      console.log("form", form);
+      let formData = new FormData(form);
+      formData.append("action", "update_quimico");
+      jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          if (response.success) {
+            window.location.href = "/cuenta";
+          } else {
+            window.location.href = "/cuenta";
+          }
+        },
+        error: function (response) {
+          console.log("error", response);
+          jQuery("#update-error").show();
+        },
+      });
     },
   });
 });
