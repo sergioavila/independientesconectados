@@ -10,6 +10,7 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
     <div class="">
         <div id="content-area" class="pt-4 educacion">
             <h1 class="my-4" >Contenido educativo disponible</h1>
+            <p class="mb-5">Mientras más interactúas, más puntos conectados obtienes</p>
             <?php 
             //gett all posts educacion
             $args = array(
