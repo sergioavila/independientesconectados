@@ -258,27 +258,6 @@ function update_stock($data) {
 
 }
 
-
-//add html to header
-function add_html_header() {
-    echo '<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(function(OneSignal) {
-        OneSignal.init({
-          appId: "d715473c-d954-4b70-94e8-d3564de38060",
-          safari_web_id: "web.onesignal.auto.68a9d4a9-72e3-41ba-a788-4f8badeb71ae",
-          notifyButton: {
-            enable: true,
-          },
-        });
-      });
-    </script>';
-    //echo '<script>const ajaxurl = "'. admin_url('admin-ajax.php'). '";</script>';
-}
-//add html to header site
-//add_action('wp_head', 'add_html_header');
-
 function custom_breadcrumbs() {
     $delimiter = ' ';
     $home = 'Inicio'; // Texto para el enlace 'Inicio'
@@ -585,11 +564,6 @@ function add_footer_modal() {
                                     <div class="mb-3">
                                         <label for="correo" class="form-label">Correo electrónico</label>
                                         <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="h-100 justify-content-center d-flex align-items-center">
-                                        <a href="#" class="link">Recibir notificaciones</a>
                                     </div>
                                 </div>
                                 <hr>
