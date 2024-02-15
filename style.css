@@ -414,14 +414,21 @@ body #anspress a.ap-questions-hyperlink{
 }
 body #whatsappsupport{
     position: fixed;
-    bottom: 30px;
-    right: 20px;
+    bottom: 40px;
+    right: 30px;
     z-index: 999999;
     width: 70px;
     border-radius: 50%;
     height: 70px;
     background-color: #69B93D;
     cursor: pointer;
+}
+body #whatsappsupport svg{
+    fill: #fff;
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
+    margin-left: 15px;
 }
 body .profile-login .input{
     border: 3px solid #0A0E77!important;
