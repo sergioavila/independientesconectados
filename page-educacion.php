@@ -21,11 +21,10 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
             );
             $query = new WP_Query($args);
             if($query->have_posts()) : ?>
-                <div class="row">
+                <div class="row gy-4">
                     <?php while($query->have_posts()) : $query->the_post(); ?>
-                        <div class="col-12 col
-                        -md-6 col-lg-4">
-                            <div class="card card-search border-0">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card card-search border-0 h-100">
                                 <div class="card-body">
                                     <a href="<?php the_permalink(); ?>" class="">
                                         <img src="<?php echo the_post_thumbnail_url(); ?>" class="card-img-top" alt="<?php the_title(); ?>">
