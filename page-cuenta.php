@@ -47,8 +47,35 @@ acf_form_head();
                                 </div>
                             </div>
                             <div class="col-12 text-center">
-                                <p>Canjea tus puntos en tus próximas compras. <a href="#" class="">Canjear puntos</a></p>
-                                <p class="color-blue mb-5">Entre más interactués en la plataforma (Independientes Conectados) acumularás más puntos para canjearlos en tu próxima compra de medicamentos.</p>
+                                <p>Canjea tus puntos en tus próximas compras.</p>
+                                <button type="button" class="btn btn-primary btn-blue" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Canjear puntos
+                                </button>
+                                <p class="color-blue mb-5 mt-3">Entre más interactués en la plataforma (Independientes Conectados) acumularás más puntos para canjearlos en tu próxima compra de medicamentos.</p>
+                            <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Canje de puntos</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        <pre>
+                                        <?php
+                                            $user_id = get_current_user_id();
+                                            echo gamipress_get_user_points( $user_id );
+                                            print_r(gamipress_get_user_achievements( $user_id ));
+                                            ?>
+                                        </pre>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <div class="p-md-5">
