@@ -61,17 +61,14 @@ acf_form_head();
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                        <pre>
-                                        <?php
-                                            $user_id = get_current_user_id();
-                                            echo gamipress_get_user_points( $user_id );
-                                            print_r(gamipress_get_user_achievements( $user_id ));
-                                            ?>
-                                        </pre>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        <form action="">
+                                            <div class="mb-3">
+                                                <label for="canje" class="form-label">Puntos a canjear</label>
+                                                <input type="text" class="form-control" id="canje" aria-describedby="">
+                                                <p>Recuerda que se enviará un correo electrónico con tu canje.</p>
+                                            </div>
+                                            <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Canjear puntos">
+                                        </form>
                                         </div>
                                         </div>
                                     </div>
