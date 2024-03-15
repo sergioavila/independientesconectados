@@ -67,8 +67,8 @@ acf_form_head();
                                                 <input type="text" class="form-control" id="canje" aria-describedby="">
                                                 <p>Recuerda que se enviará un correo electrónico con tu canje.</p>
                                             </div>
-                                            <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Canjear puntos">
-                                        </form>
+                                                <input type="submit" class="btn btn-primary btn-blue mt-5 mb-3" value="Canjear puntos">
+                                            </form>
                                         </div>
                                         </div>
                                     </div>

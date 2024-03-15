@@ -25,14 +25,14 @@ $show_default_title = get_post_meta( get_the_ID(), '_et_pb_show_title', true );
                     <?php while($query->have_posts()) : $query->the_post(); ?>
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="card card-search border-0 h-100">
+                                <div class="ribbon"><?php echo get_field('puntos');?> Puntos</div>
                                 <div class="card-body">
                                     <a href="<?php the_permalink(); ?>" class="">
                                         <img src="<?php echo the_post_thumbnail_url(); ?>" class="card-img-top" alt="<?php the_title(); ?>">
                                     </a>
                                     <h4 class="card-title mt-4"><?php the_title(); ?></h4>
                                     <div class="d-flex justify-content-between align-items-center pt-4">
-                                        <a href="<?php the_permalink(); ?>" class="btn btn-primary btn-blue">Abrir</a>
-                                        <p class="blue"><?php echo get_field('puntos');?> Puntos</p>
+                                        <a href="<?php the_permalink(); ?>" class="btn btn-primary btn-blue">Participa por <?php echo get_field('puntos');?> puntos</a>
                                     </div>
                                 </div>
                             </div>
